@@ -1,0 +1,69 @@
+/* /admn/resource/css/admn.css */
+body {
+	margin: 0;
+	font-family:
+		system-ui,
+		-apple-system,
+		Segoe UI,
+		Roboto,
+		Arial,
+		sans-serif;
+}
+.topbar {
+	position: sticky;
+	top: 0;
+	background: #fff;
+	border-bottom: 1px solid #ddd;
+}
+.topbar-inner {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	padding: 10px 12px;
+	flex-wrap: wrap;
+}
+.title {
+	font-weight: 600;
+}
+.search-form {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.search-form input,
+.search-form select {
+	padding: 6px 8px;
+}
+
+.layout {
+	display: flex;
+	height: calc(100vh - 60px);
+}
+.left {
+	width: 20%;
+	border-right: 1px solid #ddd;
+	overflow: auto;
+}
+.right {
+	width: 55%;
+	overflow: auto;
+	padding: 12px;
+}
+
+.results-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+.results-table td {
+	padding: 8px;
+	border-bottom: 1px solid #eee;
+	cursor: pointer;
+}
+.results-table tr.active td {
+	background: #f3f6ff;
+}
+.center-message {
+	padding: 16px;
+	color: #555;
+}
