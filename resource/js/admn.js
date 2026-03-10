@@ -2,12 +2,12 @@ const DEBOUNCE_MS = 300;
 let debounceTimer = null;
 
 const $ = (sel) => document.querySelector(sel);
-
+// Функция для дебаунсинга, чтобы не дергать сервер на каждый ввод
 function debounce(fn, ms) {
 	clearTimeout(debounceTimer);
 	debounceTimer = setTimeout(fn, ms);
 }
-
+// Функция для сбора фильтров
 function gatherFilters() {
 	const word = ($('#form_Search').value || '').trim();
 	const level = $('#form_level').value || '';
@@ -22,12 +22,12 @@ function gatherFilters() {
 	return fd;
 }
 
-/** UTF-8 safe base64 encode for JSON payload */
+/** Функция для кодирования строки в base64 для отправки данных на сервер в JSON-формате*/
 function b64EncodeUtf8(str) {
 	// encodeURIComponent -> UTF-8 bytes in %xx, then btoa
 	return btoa(unescape(encodeURIComponent(str)));
 }
-
+// Функция для выполнения запросов API с получением JSON-ответа и базовой обработкой ошибок
 async function apiFetchJson(url, options = {}) {
 	const res = await fetch(url, { credentials: 'same-origin', ...options });
 	const text = await res.text();
@@ -55,7 +55,7 @@ async function apiFetchJson(url, options = {}) {
 
 	return { res, json, text };
 }
-
+// Функция для поиска слов по фильтрам и отображения результатов
 async function doSearch() {
 	const fd = gatherFilters();
 	try {
@@ -71,7 +71,7 @@ async function doSearch() {
 		console.warn(e);
 	}
 }
-
+// Функция для экранирования HTML
 function escapeHtml(str) {
 	if (!str) return '';
 	return ('' + str)
@@ -83,6 +83,7 @@ function escapeHtml(str) {
 }
 
 /** LEFT */
+// Функция для рендеринга результатов поиска
 function renderResults(data) {
 	const target = $('#results');
 	const rows = Array.isArray(data?.rows) ? data.rows : [];
@@ -126,10 +127,11 @@ function renderResults(data) {
 }
 
 /** RIGHT */
+// Функция для отображения сообщений в правой панели
 function setRightMessage(html) {
 	$('#details-panel').innerHTML = `<div class="center-message">${html}</div>`;
 }
-
+// Функция для загрузки деталей слова по ID и отображения их в правой панели
 async function loadWordDetails(id) {
 	setRightMessage('იტვირთება...');
 	try {
@@ -150,7 +152,7 @@ async function loadWordDetails(id) {
 		console.warn(e);
 	}
 }
-
+// Функция для построения выпадающего списка для части речи:
 function buildPosSelect(selectedId) {
 	const src = $('#form_part_of_speech');
 	if (!src) return `<input id="edit_pos" value="${escapeHtml(selectedId)}">`;
@@ -167,7 +169,7 @@ function buildPosSelect(selectedId) {
 
 	return `<select id="edit_pos">${opts}</select>`;
 }
-
+// Функция для рендеринга карточки с деталями слова:
 function renderWordCard(data) {
 	const w = data.word || {};
 	const pos = w.part_of_speech || {};
