@@ -21,12 +21,7 @@ function gatherFilters() {
 	fd.append('tema', tema || '43');
 	return fd;
 }
-
-/** Функция для кодирования строки в base64 для отправки данных на сервер в JSON-формате*/
-function b64EncodeUtf8(str) {
-	// encodeURIComponent -> UTF-8 bytes in %xx, then btoa
-	return btoa(unescape(encodeURIComponent(str)));
-}
+//
 // Функция для выполнения запросов API с получением JSON-ответа и базовой обработкой ошибок
 async function apiFetchJson(url, options = {}) {
 	const res = await fetch(url, { credentials: 'same-origin', ...options });
@@ -218,9 +213,7 @@ async function saveWordFromForm(wordId) {
 
 	const posEl = $('#edit_pos');
 	const oldPos = String(posEl?.dataset?.old || '');
-	alert('oldPos   =' + oldPos); //считывается правильно
 	const newPos = String($('#edit_pos')?.value || '');
-	alert('newdPos   =' + newPos); //считывается правильно
 
 	if (!word) return alert('word cannot be empty');
 	if (!word_view) return alert('word_view cannot be empty');
@@ -228,7 +221,7 @@ async function saveWordFromForm(wordId) {
 		return alert('Максимум 30 символов');
 	if (!newPos || newPos === '13') return alert('Нужно выбрать часть речи');
 
-	// 1) Сохраняем word/word_view + (опционально) смену POS в ОДНОМ запросе к word_save.php
+	// Сохраняем word/word_view + (опционально) смену POS в ОДНОМ запросе к word_save.php
 	const ok = await sendWordSaveUnified({
 		id,
 		word,
@@ -245,82 +238,42 @@ async function saveWordFromForm(wordId) {
 /**
  * ЕДИНЫЙ save:
  * - всегда шлём id/word/word_view
- * - если POS поменяли — шлём payload (base64 json) {pos:newPos, confirm:0/1}
+ * - если POS поменяли — шлём {pos:newPos, confirm:0/1}
  * Сервер: word_save.php
  */
 async function sendWordSaveUnified({ id, word, word_view, oldPos, newPos }) {
 	const url = 'api/word_save.php';
-
-	// первый проход confirm=0
-	const payload0 =
-		newPos && oldPos && String(newPos) !== String(oldPos)
-			? b64EncodeUtf8(JSON.stringify({ pos: Number(newPos), confirm: 0 }))
-			: '';
+	const posChanged = newPos && oldPos && String(newPos) !== String(oldPos);
 
 	try {
-		const fd1 = new FormData();
-		fd1.append('id', String(id));
-		fd1.append('word', word);
-		fd1.append('word_view', word_view);
+		const fd = new FormData();
+		fd.append('id', String(id));
+		fd.append('word', word);
+		fd.append('word_view', word_view);
 
-		if (payload0) fd1.append('payload', payload0);
+		// Передаём pos только если часть речи действительно изменили
+		if (posChanged) {
+			fd.append('pos', String(newPos));
+		}
 
-		console.log('SEND', url, `id=${id} posChange=${payload0 ? 'yes' : 'no'}`);
+		console.log('SEND', url, `id=${id} posChange=${posChanged ? 'yes' : 'no'}`);
 
-		const r1 = await apiFetchJson(url, {
+		const r = await apiFetchJson(url, {
 			method: 'POST',
-			body: fd1,
+			body: fd,
 			headers: {
 				Accept: 'application/json',
 				'X-Requested-With': 'XMLHttpRequest',
 			},
 		});
 
-		// сервер попросил confirm
-		if (r1.res.status === 409 && r1.json?.needs_confirm) {
-			const yes = window.confirm(r1.json?.message || 'Подтвердить?');
-			if (!yes) return false;
-
-			const payload1 = b64EncodeUtf8(
-				JSON.stringify({ pos: Number(newPos), confirm: 1 }),
-			);
-
-			const fd2 = new FormData();
-			fd2.append('id', String(id));
-			fd2.append('word', word);
-			fd2.append('word_view', word_view);
-			fd2.append('payload', payload1);
-
-			console.log('SEND CONFIRM', url, `id=${id} pos=${newPos}`);
-
-			const r2 = await apiFetchJson(url, {
-				method: 'POST',
-				body: fd2,
-				headers: {
-					Accept: 'application/json',
-					'X-Requested-With': 'XMLHttpRequest',
-				},
-			});
-
-			if (!r2.res.ok || !r2.json?.success) {
-				alert(r2.json?.error || 'Save error');
-				return false;
-			}
-
-			// обновим oldPos в UI
-			const posEl = $('#edit_pos');
-			if (posEl) posEl.dataset.old = String(newPos);
-
-			return true;
-		}
-
-		if (!r1.res.ok || !r1.json?.success) {
-			alert(r1.json?.error || 'Save error');
+		if (!r.res.ok || !r.json?.success) {
+			alert(r.json?.error || 'Save error');
 			return false;
 		}
 
-		// обновим oldPos в UI если POS менялся и всё прошло без confirm (редко)
-		if (payload0) {
+		// После успешного сохранения обновляем old POS в UI
+		if (posChanged) {
 			const posEl = $('#edit_pos');
 			if (posEl) posEl.dataset.old = String(newPos);
 		}
