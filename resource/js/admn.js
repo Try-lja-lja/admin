@@ -164,44 +164,212 @@ function buildPosSelect(selectedId) {
 
 	return `<select id="edit_pos">${opts}</select>`;
 }
+
+function buildLevelSelect(selectedValue, levels, selectId = '') {
+  const current = String(selectedValue ?? '');
+
+  if (!Array.isArray(levels) || levels.length === 0) {
+    return `
+      <select${selectId ? ` id="${selectId}"` : ''} class="use-input use-level">
+        <option value="">--</option>
+      </select>
+    `;
+  }
+
+  const options = levels.map(item => {
+    const value = String(item?.value ?? '');
+    const label = escapeHtml(String(item?.label ?? value));
+    const selected = value === current ? ' selected' : '';
+    return `<option value="${escapeHtml(value)}"${selected}>${label}</option>`;
+  }).join('');
+
+  return `
+    <select${selectId ? ` id="${selectId}"` : ''} class="use-input use-level">
+      ${options}
+    </select>
+  `;
+}
+
+function buildTopicSelect(selectedValue, topics, selectId = '', extraClass = '') {
+  const current = String(selectedValue ?? '');
+  const cls = ['use-input', extraClass].filter(Boolean).join(' ');
+
+  if (!Array.isArray(topics) || topics.length === 0) {
+    return `
+      <select${selectId ? ` id="${selectId}"` : ''} class="${cls}">
+        <option value="">--</option>
+      </select>
+    `;
+  }
+
+  const options = topics.map(item => {
+    const value = String(item?.value ?? '');
+    const label = escapeHtml(String(item?.label ?? value));
+    const selected = value === current ? ' selected' : '';
+    return `<option value="${escapeHtml(value)}"${selected}>${label}</option>`;
+  }).join('');
+
+  return `
+    <select${selectId ? ` id="${selectId}"` : ''} class="${cls}">
+      ${options}
+    </select>
+  `;
+}
+
+function renderUseCard(useItem, index, levels, topics) {
+  const useId = Number(useItem?.id ?? 0);
+  const level = String(useItem?.level ?? '');
+  const translate = String(useItem?.translate ?? '');
+  const interpretation = String(useItem?.interpretation ?? '');
+  const useText = String(useItem?.use_text ?? '');
+  const tema1 = String(useItem?.tema1 ?? '');
+  const tema2 = String(useItem?.tema2 ?? '');
+  const tema3 = String(useItem?.tema3 ?? '');
+
+  const levelId = `use_level_${useId}`;
+  const translateId = `use_translate_${useId}`;
+  const interpretationId = `use_interpretation_${useId}`;
+  const useTextId = `use_text_${useId}`;
+  const tema1Id = `use_tema1_${useId}`;
+  const tema2Id = `use_tema2_${useId}`;
+  const tema3Id = `use_tema3_${useId}`;
+
+  return `
+    <div class="use-card" data-use-id="${useId}">
+      <div class="use-card-title">გამოყენება ${index + 1}</div>
+
+      <div class="use-row use-row-top">
+        <div class="use-field use-field-level">
+          <label class="use-label" for="${levelId}">დონე</label>
+          ${buildLevelSelect(level, levels, levelId)}
+        </div>
+
+        <div class="use-field use-field-translate">
+          <label class="use-label" for="${translateId}">თარგმანი</label>
+          <input
+            id="${translateId}"
+            class="use-input use-translate"
+            type="text"
+            value="${escapeHtml(translate)}"
+          >
+        </div>
+      </div>
+
+      <div class="use-row">
+        <div class="use-field use-field-full">
+          <label class="use-label" for="${interpretationId}">განმარტება</label>
+          <textarea
+            id="${interpretationId}"
+            class="use-input use-interpretation"
+            rows="3"
+          >${escapeHtml(interpretation)}</textarea>
+        </div>
+      </div>
+
+      <div class="use-row">
+        <div class="use-field use-field-full">
+          <label class="use-label" for="${useTextId}">გამოყენება</label>
+          <textarea
+            id="${useTextId}"
+            class="use-input use-text"
+            rows="3"
+          >${escapeHtml(useText)}</textarea>
+        </div>
+      </div>
+
+      <div class="use-row use-row-topics">
+        <div class="use-field use-field-topic">
+          <label class="use-label" for="${tema1Id}">თემა 1</label>
+          ${buildTopicSelect(tema1, topics, tema1Id, 'use-tema1')}
+        </div>
+
+        <div class="use-field use-field-topic">
+          <label class="use-label" for="${tema2Id}">თემა 2</label>
+          ${buildTopicSelect(tema2, topics, tema2Id, 'use-tema2')}
+        </div>
+
+        <div class="use-field use-field-topic">
+          <label class="use-label" for="${tema3Id}">თემა 3</label>
+          ${buildTopicSelect(tema3, topics, tema3Id, 'use-tema3')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
+
+
+
 // Функция для рендеринга карточки с деталями слова:
 function renderWordCard(data) {
-	const w = data.word || {};
-	const pos = w.part_of_speech || {};
+  const panel = $('#details-panel');
+  const w = data?.word || null;
 
-	const word = w.word ?? '';
-	const wordView = w.word_view ?? '';
-	const posId = String(pos.id ?? '');
+  if (!panel) return;
+  if (!w) {
+    panel.innerHTML = '<div class="muted">მონაცემები ვერ მოიძებნა</div>';
+    return;
+  }
 
-	$('#details-panel').innerHTML = `
-    <div class="card">
-      <div class="card-row">
-        <label>word</label>
-        <input id="edit_word" type="text" maxlength="30" value="${escapeHtml(word)}">
+  const pos = w.part_of_speech || {};
+  const uses = Array.isArray(data?.uses) ? data.uses : [];
+  const levels = Array.isArray(data?.meta?.levels) ? data.meta.levels : [];
+  const topics = Array.isArray(data?.meta?.topics) ? data.meta.topics : [];
+
+  const usesHtml = uses.length > 0
+    ? uses.map((useItem, index) => renderUseCard(useItem, index, levels, topics)).join('')
+    : '<div class="muted">გამოყენება არ არის</div>';
+
+  panel.innerHTML = `
+    <div class="card editor-card">
+      <div class="field">
+        <label for="edit_word">სიტყვა</label>
+        <input
+          id="edit_word"
+          type="text"
+          maxlength="30"
+          value="${escapeHtml(w.word || '')}"
+        >
       </div>
 
-      <div class="card-row">
-        <label>word_view</label>
-        <input id="edit_word_view" type="text" maxlength="30" value="${escapeHtml(wordView)}">
+      <div class="field">
+        <label for="edit_word_view">სიტყვის ფორმა</label>
+        <input
+          id="edit_word_view"
+          type="text"
+          maxlength="30"
+          value="${escapeHtml(w.word_view || '')}"
+        >
       </div>
 
-      <div class="card-row">
-        <label>POS</label>
-        ${buildPosSelect(posId)}
+      <div class="field">
+        <label for="edit_pos">მეტყველების ნაწილი</label>
+        ${buildPosSelect(pos.id)}
       </div>
 
-      <div class="card-actions">
-        <button id="btn_word_save" type="button">Сохранить</button>
+      <div class="editor-actions">
+        <button id="btn_word_save" class="btn primary" type="button">
+          შენახვა
+        </button>
+      </div>
+    </div>
+
+    <div class="uses-section">
+      <div class="uses-section-title">გამოყენება</div>
+      <div class="uses-list">
+        ${usesHtml}
       </div>
     </div>
   `;
 
-	// сохраним "старый POS" в data-атрибуте
-	$('#edit_pos').dataset.old = posId;
+  const posEl = $('#edit_pos');
+  if (posEl) posEl.dataset.old = String(pos.id || '');
 
-	$('#btn_word_save').addEventListener('click', async () => {
-		await saveWordFromForm(w.id);
-	});
+  const btnSave = $('#btn_word_save');
+  if (btnSave) {
+    btnSave.addEventListener('click', () => saveWordFromForm(w.id));
+  }
 }
 
 async function saveWordFromForm(wordId) {

@@ -28,7 +28,7 @@ try {
     $posEnMap = [
         '1'=>'Noun','2'=>'Adjective','3'=>'Numeral','4'=>'Pronoun','5'=>'Verb',
         '6'=>'Verbal Noun','7'=>'Participle','8'=>'Adverb','9'=>'Particle',
-        '10'=>'Conjunction','11'=>'Postposition','12'=>'Interjection','13'=>'All',
+        '10'=>'Conjunction','11'=>'Postposition','12'=>'Interjection',
     ];
     $posEn = $posEnMap[$posId] ?? '—';
 
@@ -115,6 +115,32 @@ try {
     }
     unset($u);
 
+    $metaLevels = [];
+    foreach ($LEVEL as $value => $label) {
+        // "all" нужно только для фильтра поиска, в форме use не нужно
+        if ((string)$value === 'all') {
+            continue;
+        }
+
+        $metaLevels[] = [
+            'value' => (string)$value,
+            'label' => (string)$label,
+        ];
+    }
+
+    $metaTopics = [];
+    foreach ($TOPICS as $value => $label) {
+        // "43 => ყველა" нужно только для фильтра поиска, в форме use не нужно
+        if ((string)$value === '43') {
+            continue;
+        }
+
+        $metaTopics[] = [
+            'value' => (string)$value,
+            'label' => (string)$label,
+        ];
+    }
+
     echo json_encode([
     'success' => true,
     'word' => [
@@ -128,7 +154,11 @@ try {
         ],
     ],
     'uses' => $uses,
-], JSON_UNESCAPED_UNICODE);
+    'meta' => [
+        'levels' => $metaLevels,
+        'topics' => $metaTopics,
+        ]
+    ], JSON_UNESCAPED_UNICODE);
 
 } catch (Throwable $e) {
     if ($DEBUG) jerr('DB error: ' . $e->getMessage(), 500);
