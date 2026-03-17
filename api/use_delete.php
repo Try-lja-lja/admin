@@ -3,7 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/bootstrap.php';
 
 $useId = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-if ($useId <= 0) api_error('Bad id', 400);
+if ($useId <= 0) api_error('არასწორი ჩანაწერის იდენტიფიკატორი', 400);
 
 try {
     $pdo->beginTransaction();
@@ -14,7 +14,7 @@ try {
     $row = $st->fetch(PDO::FETCH_ASSOC);
     if (!$row) {
         $pdo->rollBack();
-        api_error('use not found', 404);
+        api_error('გამოყენება ვერ მოიძებნა', 404);
     }
     $wordId = (int)$row['word_id'];
 
@@ -26,7 +26,7 @@ try {
     // по факту "после удаления останется 0" запрещаем
     if (($cnt - 1) < 1) {
         $pdo->rollBack();
-        api_error('Нельзя удалить последнее использование слова', 400);
+        api_error('სიტყვის ბოლო გამოყენების წაშლა შეუძლებელია', 400);
     }
 
     // каскад по useId
@@ -44,5 +44,5 @@ try {
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) $pdo->rollBack();
     error_log('use_delete error: ' . $e->getMessage());
-    api_error('DB error', 500);
+    api_error('მონაცემთა ბაზის შეცდომა', 500);
 }

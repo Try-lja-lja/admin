@@ -1,5 +1,10 @@
 const DEBOUNCE_MS = 300;
+const NOTICE_SUCCESS_MS = 4200;
+const NOTICE_ERROR_MS = 6500;
+
 let debounceTimer = null;
+let noticeTimer = null;
+let currentWordId = 0;
 
 const $ = (sel) => document.querySelector(sel);
 // Функция для дебаунсинга, чтобы не дергать сервер на каждый ввод
@@ -77,6 +82,40 @@ function escapeHtml(str) {
 		.replace(/'/g, '&#039;');
 }
 
+function getRightNoticeEl() {
+	let el = document.querySelector('.panel-notice');
+	if (el) return el;
+
+	el = document.createElement('div');
+	el.className = 'panel-notice';
+	el.hidden = true;
+	document.body.appendChild(el);
+
+	return el;
+}
+
+function showPanelNotice(type, message, details = '', timeout = NOTICE_SUCCESS_MS) {
+	const el = getRightNoticeEl();
+	if (!el) return;
+
+	clearTimeout(noticeTimer);
+
+	const safeMessage = escapeHtml(String(message || ''));
+	const safeDetails = details ? escapeHtml(String(details)) : '';
+
+	el.className = `panel-notice ${type === 'error' ? 'is-error' : 'is-success'}`;
+	el.innerHTML = `
+		<div class="panel-notice-message">${safeMessage}</div>
+		${safeDetails ? `<div class="panel-notice-details">${safeDetails}</div>` : ''}
+	`;
+	el.hidden = false;
+
+	noticeTimer = setTimeout(() => {
+		el.hidden = true;
+		el.innerHTML = '';
+	}, timeout);
+}
+
 /** LEFT */
 // Функция для рендеринга результатов поиска
 function renderResults(data) {
@@ -127,8 +166,14 @@ function setRightMessage(html) {
 	$('#details-panel').innerHTML = `<div class="center-message">${html}</div>`;
 }
 // Функция для загрузки деталей слова по ID и отображения их в правой панели
-async function loadWordDetails(id) {
-	setRightMessage('იტვირთება...');
+async function loadWordDetails(id, options = {}) {
+	currentWordId = Number(id || 0);
+
+	const keepContent = !!options.keepContent;
+	if (!keepContent) {
+		setRightMessage('იტვირთება...');
+	}
+
 	try {
 		const { res, json } = await apiFetchJson(
 			`api/word_details.php?id=${encodeURIComponent(id)}`,
@@ -136,14 +181,18 @@ async function loadWordDetails(id) {
 		);
 
 		if (!res.ok || !json?.success) {
-			setRightMessage('ვერ ჩაიტვირთა');
+			if (!keepContent) {
+				setRightMessage('ვერ ჩაიტვირთა');
+			}
 			console.warn('word_details error', json);
 			return;
 		}
 
 		renderWordCard(json);
 	} catch (e) {
-		setRightMessage('შეცდომა');
+		if (!keepContent) {
+			setRightMessage('შეცდომა');
+		}
 		console.warn(e);
 	}
 }
@@ -293,6 +342,16 @@ function renderUseCard(useItem, index, levels, topics) {
           ${buildTopicSelect(tema3, topics, tema3Id, 'use-tema3')}
         </div>
       </div>
+
+      <div class="editor-actions">
+  <button class="btn primary btn-use-save" type="button">
+    შენახვა
+  </button>
+
+  <button class="btn danger btn-use-delete" type="button">
+    წაშლა
+  </button>
+</div>
     </div>
   `;
 }
@@ -356,12 +415,64 @@ function renderWordCard(data) {
     </div>
 
     <div class="uses-section">
-      <div class="uses-section-title">გამოყენება</div>
-      <div class="uses-list">
-        ${usesHtml}
-      </div>
-    </div>
+  <div class="uses-section-header">
+    <div class="uses-section-title">გამოყენება</div>
+    <button id="btn_use_create" class="btn primary" type="button">
+      ახალი გამოყენება
+    </button>
+  </div>
+
+  <div class="uses-list">
+    ${usesHtml}
+  </div>
+</div>
   `;
+
+
+// Существующий код для рендеринга карточки
+panel.querySelector('.uses-list').innerHTML = usesHtml;
+
+// Добавляем синонимы
+panel.innerHTML += `
+  <div class="use-synonyms">
+    <div class="use-section-header">
+      <div class="use-section-title">Синонимы</div>
+      <button class="btn primary btn-add-synonym" type="button">Добавить синоним</button>
+    </div>
+    <div class="use-synonyms-list">
+      <!-- Здесь будут рендериться синонимы -->
+    </div>
+  </div>
+`;
+
+// Добавляем антонимы
+panel.innerHTML += `
+  <div class="use-antonyms">
+    <div class="use-section-header">
+      <div class="use-section-title">Антонимы</div>
+      <button class="btn primary btn-add-antonym" type="button">Добавить антоним</button>
+    </div>
+    <div class="use-antonyms-list">
+      <!-- Здесь будут рендериться антонимы -->
+    </div>
+  </div>
+`;
+
+// Добавляем идиомы
+panel.innerHTML += `
+  <div class="use-idioms">
+    <div class="use-section-header">
+      <div class="use-section-title">Идиомы</div>
+      <button class="btn primary btn-add-idiom" type="button">Добавить идиому</button>
+    </div>
+    <div class="use-idioms-list">
+      <!-- Здесь будут рендериться идиомы -->
+    </div>
+  </div>
+`;
+
+
+
 
   const posEl = $('#edit_pos');
   if (posEl) posEl.dataset.old = String(pos.id || '');
@@ -370,6 +481,35 @@ function renderWordCard(data) {
   if (btnSave) {
     btnSave.addEventListener('click', () => saveWordFromForm(w.id));
   }
+
+  const btnUseCreate = $('#btn_use_create');
+if (btnUseCreate) {
+  btnUseCreate.addEventListener('click', async () => {
+    await createUse(w.id);
+  });
+}
+
+  panel.querySelectorAll('.btn-use-save').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const card = btn.closest('.use-card');
+      if (!card) return;
+      await saveUseFromCard(card);
+    });
+  });
+
+  panel.querySelectorAll('.btn-use-delete').forEach((btn) => {
+  btn.addEventListener('click', async () => {
+    const card = btn.closest('.use-card');
+    if (!card) return;
+
+    const useId = Number(card.dataset.useId || 0);
+    if (!useId) return;
+
+    if (!confirm('ნამდვილად გსურთ გამოყენების წაშლა?')) return;
+
+    await deleteUse(useId);
+  });
+});
 }
 
 async function saveWordFromForm(wordId) {
@@ -383,11 +523,45 @@ async function saveWordFromForm(wordId) {
 	const oldPos = String(posEl?.dataset?.old || '');
 	const newPos = String($('#edit_pos')?.value || '');
 
-	if (!word) return alert('word cannot be empty');
-	if (!word_view) return alert('word_view cannot be empty');
-	if (word.length > 30 || word_view.length > 30)
-		return alert('Максимум 30 символов');
-	if (!newPos || newPos === '13') return alert('Нужно выбрать часть речи');
+if (!word) {
+	showPanelNotice(
+		'error',
+		'სიტყვის შენახვა ვერ მოხერხდა',
+		'სიტყვა სავალდებულოა',
+		NOTICE_ERROR_MS,
+	);
+	return;
+}
+
+if (!word_view) {
+	showPanelNotice(
+		'error',
+		'სიტყვის შენახვა ვერ მოხერხდა',
+		'სიტყვის საჩვენებელი ფორმა სავალდებულოა',
+		NOTICE_ERROR_MS,
+	);
+	return;
+}
+
+if (word.length > 30 || word_view.length > 30) {
+	showPanelNotice(
+		'error',
+		'სიტყვის შენახვა ვერ მოხერხდა',
+		'მაქსიმალური სიგრძეა 30 სიმბოლო',
+		NOTICE_ERROR_MS,
+	);
+	return;
+}
+
+if (!newPos || newPos === '13') {
+	showPanelNotice(
+		'error',
+		'სიტყვის შენახვა ვერ მოხერხდა',
+		'აუცილებელია მეტყველების ნაწილის არჩევა',
+		NOTICE_ERROR_MS,
+	);
+	return;
+}
 
 	// Сохраняем word/word_view + (опционально) смену POS в ОДНОМ запросе к word_save.php
 	const ok = await sendWordSaveUnified({
@@ -401,6 +575,195 @@ async function saveWordFromForm(wordId) {
 
 	await doSearch();
 	await loadWordDetails(id);
+}
+
+async function saveUseFromCard(cardEl) {
+	const useId = Number(cardEl?.dataset?.useId || 0);
+	if (!useId) return false;
+
+	const level = String(cardEl.querySelector('.use-level')?.value || '').trim();
+	const translate = String(cardEl.querySelector('.use-translate')?.value || '').trim();
+	const interpretation = String(cardEl.querySelector('.use-interpretation')?.value || '').trim();
+	const useText = String(cardEl.querySelector('.use-text')?.value || '').trim();
+	const tema1 = String(cardEl.querySelector('.use-tema1')?.value || '').trim();
+	const tema2 = String(cardEl.querySelector('.use-tema2')?.value || '').trim();
+	const tema3 = String(cardEl.querySelector('.use-tema3')?.value || '').trim();
+
+	const ok = await sendUseUpdate({
+		id: useId,
+		level,
+		translate,
+		interpretation,
+		use: useText,
+		tema1,
+		tema2,
+		tema3,
+	});
+
+	if (!ok) return false;
+
+	showPanelNotice('success', 'გამოყენება შენახულია', '', NOTICE_SUCCESS_MS);
+
+	if (currentWordId > 0) {
+		const rightEl = document.querySelector('.right');
+		const prevScrollTop = rightEl ? rightEl.scrollTop : 0;
+
+		try {
+			await loadWordDetails(currentWordId, { keepContent: true });
+
+			if (rightEl) {
+				rightEl.scrollTop = prevScrollTop;
+			}
+		} catch (e) {
+			console.warn(e);
+		}
+	}
+
+	return true;
+}
+
+async function sendUseUpdate({ id, level, translate, interpretation, use, tema1, tema2, tema3 }) {
+	const url = 'api/use_update.php';
+
+	try {
+		const fd = new FormData();
+		fd.append('id', String(id));
+		fd.append('level', level);
+		fd.append('translate', translate);
+		fd.append('interpretation', interpretation);
+		fd.append('use', use);
+		fd.append('tema1', tema1 || '0');
+		fd.append('tema2', tema2 || '0');
+		fd.append('tema3', tema3 || '0');
+
+		const r = await apiFetchJson(url, {
+			method: 'POST',
+			body: fd,
+			headers: {
+				Accept: 'application/json',
+				'X-Requested-With': 'XMLHttpRequest',
+			},
+		});
+
+		if (!r.res.ok || !r.json?.success) {
+	showPanelNotice(
+		'error',
+		'გამოყენების შენახვა ვერ მოხერხდა',
+		r.json?.error || 'შენახვის შეცდომა',
+		NOTICE_ERROR_MS,
+	);
+	return false;
+}
+
+		return true;
+	} catch (e) {
+		console.warn(e);
+		showPanelNotice(
+	'error',
+	'გამოყენების შენახვა ვერ მოხერხდა',
+	'ქსელის ან სერვერის შეცდომა',
+	NOTICE_ERROR_MS,
+);
+		return false;
+	}
+}
+
+async function deleteUse(useId) {
+  try {
+    const fd = new FormData();
+    fd.append('id', String(useId));
+
+    const r = await apiFetchJson('api/use_delete.php', {
+      method: 'POST',
+      body: fd,
+      headers: {
+        Accept: 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    });
+
+    if (!r.res.ok || !r.json?.success) {
+      showPanelNotice(
+        'error',
+        'გამოყენების წაშლა ვერ მოხერხდა',
+        r.json?.error || 'შეცდომა',
+        NOTICE_ERROR_MS
+      );
+      return;
+    }
+
+    showPanelNotice('success', 'გამოყენება წაიშალა', '', NOTICE_SUCCESS_MS);
+
+    if (currentWordId > 0) {
+      await loadWordDetails(currentWordId, { keepContent: true });
+    }
+
+  } catch (e) {
+    console.warn(e);
+    showPanelNotice(
+      'error',
+      'გამოყენების წაშლა ვერ მოხერხდა',
+      'ქსელის ან სერვერის შეცდომა',
+      NOTICE_ERROR_MS
+    );
+  }
+}
+
+async function createUse(wordId) {
+	const id = Number(wordId || 0);
+	if (!id) return false;
+
+	try {
+		const fd = new FormData();
+		fd.append('word_id', String(id));
+
+		const r = await apiFetchJson('api/use_create.php', {
+			method: 'POST',
+			body: fd,
+			headers: {
+				Accept: 'application/json',
+				'X-Requested-With': 'XMLHttpRequest',
+			},
+		});
+
+		if (!r.res.ok || !r.json?.success) {
+			showPanelNotice(
+				'error',
+				'გამოყენების დამატება ვერ მოხერხდა',
+				r.json?.error || 'შეცდომა',
+				NOTICE_ERROR_MS,
+			);
+			return false;
+		}
+
+		showPanelNotice('success', 'გამოყენება დამატებულია', '', NOTICE_SUCCESS_MS);
+
+		if (currentWordId > 0) {
+			const rightEl = document.querySelector('.right');
+			const prevScrollTop = rightEl ? rightEl.scrollTop : 0;
+
+			try {
+				await loadWordDetails(currentWordId, { keepContent: true });
+
+				if (rightEl) {
+					rightEl.scrollTop = prevScrollTop;
+				}
+			} catch (e) {
+				console.warn(e);
+			}
+		}
+
+		return true;
+	} catch (e) {
+		console.warn(e);
+		showPanelNotice(
+			'error',
+			'გამოყენების დამატება ვერ მოხერხდა',
+			'ქსელის ან სერვერის შეცდომა',
+			NOTICE_ERROR_MS,
+		);
+		return false;
+	}
 }
 
 /**
@@ -436,21 +799,34 @@ async function sendWordSaveUnified({ id, word, word_view, oldPos, newPos }) {
 		});
 
 		if (!r.res.ok || !r.json?.success) {
-			alert(r.json?.error || 'Save error');
-			return false;
-		}
+	showPanelNotice(
+		'error',
+		'სიტყვის შენახვა ვერ მოხერხდა',
+		r.json?.error || 'შენახვის შეცდომა',
+		NOTICE_ERROR_MS,
+	);
+	return false;
+}
 
 		// После успешного сохранения обновляем old POS в UI
-		if (posChanged) {
-			const posEl = $('#edit_pos');
-			if (posEl) posEl.dataset.old = String(newPos);
-		}
+if (posChanged) {
+	const posEl = $('#edit_pos');
+	if (posEl) posEl.dataset.old = String(newPos);
+}
 
-		return true;
+showPanelNotice('success', 'სიტყვა შენახულია', '', NOTICE_SUCCESS_MS);
+
+return true;
 	} catch (e) {
-		console.warn(e);
-		return false;
-	}
+	console.warn(e);
+		showPanelNotice(
+	'error',
+	'სიტყვის შენახვა ვერ მოხერხდა',
+	'ქსელის ან სერვერის შეცდომა',
+	NOTICE_ERROR_MS,
+);
+	return false;
+}
 }
 
 function init() {
