@@ -49,6 +49,12 @@ require_once __DIR__ . '/connect.php';
 
 <main class="layout">
   <section class="left">
+    <div class="results-toolbar">
+      <button id="btn_word_create" class="btn primary" type="button">
+        ახალი სიტყვა
+      </button>
+    </div>
+
     <div id="results" class="results"></div>
   </section>
 

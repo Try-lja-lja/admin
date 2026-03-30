@@ -144,20 +144,21 @@ function renderResults(data) {
 	}
 	tbody.insertAdjacentHTML('beforeend', buf);
 
-	table.addEventListener('click', async (ev) => {
-		const tr = ev.target.closest('tr[data-id]');
-		if (!tr) return;
+table.addEventListener('click', async (ev) => {
+    const tr = ev.target.closest('tr[data-id]');
+    if (!tr) return;
 
-		table
-			.querySelectorAll('tr.active')
-			.forEach((x) => x.classList.remove('active'));
-		tr.classList.add('active');
+    table
+        .querySelectorAll('tr.active')
+        .forEach((x) => x.classList.remove('active'));
+    tr.classList.add('active');
 
-		const id = Number(tr.dataset.id || 0);
-		if (!id) return;
+    const id = Number(tr.dataset.id || 0);
+    if (!id) return;
 
-		await loadWordDetails(id);
-	});
+    currentWordId = id;  // Обновляем currentWordId при выборе старого слова
+    await loadWordDetails(id);
+});
 }
 
 /** RIGHT */
@@ -343,6 +344,121 @@ function renderUseCard(useItem, index, levels, topics) {
         </div>
       </div>
 
+	        <div class="use-row use-row-related use-row-related-header">
+        <div class="use-field use-field-full">
+          <div class="use-related-head">
+            <div class="use-label">სინონიმები</div>
+            <button class="btn primary btn-add-synonym" type="button">
+              დამატება სინონიმი
+            </button>
+          </div>
+        </div>
+      </div>
+
+      ${Array.isArray(useItem?.synonyms) && useItem.synonyms.length > 0
+        ? useItem.synonyms.map((synonym) => `
+      <div class="use-row use-row-synonym">
+        <div class="use-field use-field-full">
+          <div class="use-related-line">
+            <input
+              class="use-input use-synonym-input"
+              type="text"
+              value="${escapeHtml(String(synonym ?? ''))}"
+            >
+            <button class="btn danger btn-remove-synonym" type="button">
+              წაშლა
+            </button>
+          </div>
+        </div>
+      </div>
+      `).join('')
+        : ''}
+
+      <div class="use-row use-row-related use-row-related-header">
+        <div class="use-field use-field-full">
+          <div class="use-related-head">
+            <div class="use-label">ანტონიმები</div>
+            <button class="btn primary btn-add-antonym" type="button">
+              დამატება ანტონიმი
+            </button>
+          </div>
+        </div>
+      </div>
+
+      ${Array.isArray(useItem?.antonyms) && useItem.antonyms.length > 0
+        ? useItem.antonyms.map((antonym) => `
+      <div class="use-row use-row-antonym">
+        <div class="use-field use-field-full">
+          <div class="use-related-line">
+            <input
+              class="use-input use-antonym-input"
+              type="text"
+              value="${escapeHtml(String(antonym ?? ''))}"
+            >
+            <button class="btn danger btn-remove-antonym" type="button">
+              წაშლა
+            </button>
+          </div>
+        </div>
+      </div>
+      `).join('')
+        : ''}
+
+      <div class="use-row use-row-related use-row-related-header">
+        <div class="use-field use-field-full">
+          <div class="use-related-head">
+            <div class="use-label">იდიომები</div>
+            <button class="btn primary btn-add-idiom" type="button">
+              დამატება იდიომი
+            </button>
+          </div>
+        </div>
+      </div>
+
+${Array.isArray(useItem?.idioms) && useItem.idioms.length > 0
+  ? useItem.idioms.map((idiom) => `
+<div class="use-idiom-block">
+
+  <div class="use-row use-row-idiom">
+    <div class="use-field use-field-full">
+      <label class="use-label">იდიომა</label>
+      <div class="use-related-line">
+        <input
+          class="use-input use-idiom-input"
+          type="text"
+          value="${escapeHtml(String(idiom?.idiom ?? ''))}"
+        >
+        <button class="btn danger btn-remove-idiom" type="button">
+          წაშლა
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="use-row use-row-idiom-interpretation">
+    <div class="use-field use-field-full">
+      <label class="use-label">იდიომის განმარტება</label>
+      <textarea
+        class="use-input use-idiom-interpretation"
+        rows="2"
+      >${escapeHtml(String(idiom?.interpretation ?? ''))}</textarea>
+    </div>
+  </div>
+
+  <div class="use-row use-row-idiom-use">
+    <div class="use-field use-field-full">
+      <label class="use-label">იდიომის გამოყენება</label>
+      <textarea
+        class="use-input use-idiom-use"
+        rows="2"
+      >${escapeHtml(String(idiom?.use ?? ''))}</textarea>
+    </div>
+  </div>
+
+</div>
+`).join('')
+  : ''}
+
       <div class="editor-actions">
   <button class="btn primary btn-use-save" type="button">
     შენახვა
@@ -356,13 +472,372 @@ function renderUseCard(useItem, index, levels, topics) {
   `;
 }
 
+function buildSynonymRow(value = '') {
+  return `
+    <div class="use-row use-row-synonym">
+      <div class="use-field use-field-full">
+        <div class="use-related-line">
+          <input
+            class="use-input use-synonym-input"
+            type="text"
+            value="${escapeHtml(String(value))}"
+          >
+          <button class="btn danger btn-remove-synonym" type="button">
+            წაშლა
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
 
+function buildAntonymRow(value = '') {
+  return `
+    <div class="use-row use-row-antonym">
+      <div class="use-field use-field-full">
+        <div class="use-related-line">
+          <input
+            class="use-input use-antonym-input"
+            type="text"
+            value="${escapeHtml(String(value))}"
+          >
+          <button class="btn danger btn-remove-antonym" type="button">
+            წაშლა
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
 
+function buildIdiomBlock(idiom = '', interpretation = '', useText = '') {
+  return `
+    <div class="use-idiom-block">
 
+      <div class="use-row use-row-idiom">
+        <div class="use-field use-field-full">
+          <label class="use-label">იდიომა</label>
+          <div class="use-related-line">
+            <input
+              class="use-input use-idiom-input"
+              type="text"
+              value="${escapeHtml(String(idiom))}"
+            >
+            <button class="btn danger btn-remove-idiom" type="button">
+              წაშლა
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="use-row use-row-idiom-interpretation">
+        <div class="use-field use-field-full">
+          <label class="use-label">იდიომის განმარტება</label>
+          <textarea
+            class="use-input use-idiom-interpretation"
+            rows="2"
+          >${escapeHtml(String(interpretation))}</textarea>
+        </div>
+      </div>
+
+      <div class="use-row use-row-idiom-use">
+        <div class="use-field use-field-full">
+          <label class="use-label">იდიომის გამოყენება</label>
+          <textarea
+            class="use-input use-idiom-use"
+            rows="2"
+          >${escapeHtml(String(useText))}</textarea>
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
+function addSynonymRow(cardEl) {
+  const headerRows = cardEl.querySelectorAll('.use-row-related-header');
+  if (!headerRows.length) return;
+
+  const synonymHeaderRow = headerRows[0];
+
+  let insertAfter = synonymHeaderRow;
+  let next = synonymHeaderRow.nextElementSibling;
+
+  while (next && next.classList.contains('use-row-synonym')) {
+    insertAfter = next;
+    next = next.nextElementSibling;
+  }
+
+  insertAfter.insertAdjacentHTML('afterend', buildSynonymRow(''));
+}
+
+function addAntonymRow(cardEl) {
+  const headerRows = cardEl.querySelectorAll('.use-row-related-header');
+  if (headerRows.length < 2) return;
+
+  const antonymHeaderRow = headerRows[1];
+
+  let insertAfter = antonymHeaderRow;
+  let next = antonymHeaderRow.nextElementSibling;
+
+  while (next && next.classList.contains('use-row-antonym')) {
+    insertAfter = next;
+    next = next.nextElementSibling;
+  }
+
+  insertAfter.insertAdjacentHTML('afterend', buildAntonymRow(''));
+}
+
+function addIdiomBlock(cardEl) {
+  const headerRows = cardEl.querySelectorAll('.use-row-related-header');
+  if (headerRows.length < 3) return;
+
+  const idiomHeaderRow = headerRows[2];
+
+  let insertAfter = idiomHeaderRow;
+  let next = idiomHeaderRow.nextElementSibling;
+
+  while (next && next.classList.contains('use-idiom-block')) {
+    insertAfter = next;
+    next = next.nextElementSibling;
+  }
+
+  insertAfter.insertAdjacentHTML('afterend', buildIdiomBlock('', '', ''));
+}
+
+function renderGrammarHtml(data) {
+  let grammarHtml = '';
+
+  // Проверяем, есть ли данные о грамматике
+  if (data.grammar) {
+    grammarHtml = `
+      <h3>გრამატიკა</h3>
+      <pre>${JSON.stringify(data.grammar, null, 2)}</pre>  <!-- Сырые данные -->
+    `;
+  } else {
+    grammarHtml = '<p>გრამატიკა არ არის</p>';
+  }
+
+  return grammarHtml;
+}
+
+function bindRelatedButtons(panel) {
+  if (!panel) return;
+
+  if (panel.dataset.relatedButtonsBound === '1') {
+    return;
+  }
+
+  panel.dataset.relatedButtonsBound = '1';
+
+  panel.addEventListener('click', (ev) => {
+    const btn = ev.target.closest('button');
+    if (!btn) return;
+
+    const card = btn.closest('.use-card');
+    if (!card) return;
+
+    if (btn.classList.contains('btn-add-synonym')) {
+      addSynonymRow(card);
+      return;
+    }
+
+    if (btn.classList.contains('btn-add-antonym')) {
+      addAntonymRow(card);
+      return;
+    }
+
+    if (btn.classList.contains('btn-add-idiom')) {
+      addIdiomBlock(card);
+      return;
+    }
+
+    if (btn.classList.contains('btn-remove-synonym')) {
+      const row = btn.closest('.use-row-synonym');
+      if (row) row.remove();
+      return;
+    }
+
+    if (btn.classList.contains('btn-remove-antonym')) {
+      const row = btn.closest('.use-row-antonym');
+      if (row) row.remove();
+      return;
+    }
+
+    if (btn.classList.contains('btn-remove-idiom')) {
+      const block = btn.closest('.use-idiom-block');
+      if (block) block.remove();
+    }
+  });
+}
+
+function collectSynonymsFromCard(cardEl) {
+  return Array.from(cardEl.querySelectorAll('.use-synonym-input'))
+    .map((input) => String(input.value || '').trim())
+    .filter((value) => value !== '');
+}
+
+function collectAntonymsFromCard(cardEl) {
+  return Array.from(cardEl.querySelectorAll('.use-antonym-input'))
+    .map((input) => String(input.value || '').trim())
+    .filter((value) => value !== '');
+}
+
+function collectIdiomsFromCard(cardEl) {
+  return Array.from(cardEl.querySelectorAll('.use-idiom-block'))
+    .map((block) => {
+      const idiom = String(block.querySelector('.use-idiom-input')?.value || '').trim();
+      const interpretation = String(
+        block.querySelector('.use-idiom-interpretation')?.value || ''
+      ).trim();
+      const useText = String(block.querySelector('.use-idiom-use')?.value || '').trim();
+
+      return {
+        idiom,
+        interpretation,
+        use: useText,
+      };
+    })
+    .filter((item) => item.idiom !== '');
+}
+
+async function sendSynonymsSave(useId, items) {
+  const fd = new FormData();
+  fd.append('use_id', String(useId));
+
+  items.forEach((item, index) => {
+    fd.append(`items[${index}]`, item);
+  });
+
+  const r = await apiFetchJson('api/synonym_create.php', {
+    method: 'POST',
+    body: fd,
+    headers: {
+      Accept: 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+  });
+
+  if (!r.res.ok || !r.json?.success) {
+    throw new Error(r.json?.error || 'სინონიმების შენახვა ვერ მოხერხდა');
+  }
+
+  return true;
+}
+
+async function sendAntonymsSave(useId, items) {
+  const fd = new FormData();
+  fd.append('use_id', String(useId));
+
+  items.forEach((item, index) => {
+    fd.append(`items[${index}]`, item);
+  });
+
+  const r = await apiFetchJson('api/antonym_create.php', {
+    method: 'POST',
+    body: fd,
+    headers: {
+      Accept: 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+  });
+
+  if (!r.res.ok || !r.json?.success) {
+    throw new Error(r.json?.error || 'ანტონიმების შენახვა ვერ მოხერხდა');
+  }
+
+  return true;
+}
+
+async function sendIdiomsSave(useId, items) {
+  const fd = new FormData();
+  fd.append('use_id', String(useId));
+
+  items.forEach((item, index) => {
+    fd.append(`items[${index}][idiom]`, item.idiom || '');
+    fd.append(`items[${index}][interpretation]`, item.interpretation || '');
+    fd.append(`items[${index}][use]`, item.use || '');
+  });
+
+  const r = await apiFetchJson('api/idiom_create.php', {
+    method: 'POST',
+    body: fd,
+    headers: {
+      Accept: 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+  });
+
+  if (!r.res.ok || !r.json?.success) {
+    throw new Error(r.json?.error || 'იდიომების შენახვა ვერ მოხერხდა');
+  }
+
+  return true;
+}
+
+function renderCreateWordForm() {
+  const panel = $('#details-panel');
+  if (!panel) return;
+
+  panel.innerHTML = `
+    <div class="card editor-card editor-card-create">
+      <div class="field">
+        <label for="create_word">სიტყვა</label>
+        <input
+          id="create_word"
+          type="text"
+          maxlength="30"
+          value=""
+        >
+      </div>
+
+      <div class="field">
+        <label for="create_word_view">სიტყვის ფორმა</label>
+        <input
+          id="create_word_view"
+          type="text"
+          maxlength="30"
+          value=""
+        >
+      </div>
+
+      <div class="field">
+        <label for="create_pos">მეტყველების ნაწილი</label>
+        ${buildPosSelect('')}
+      </div>
+
+      <div class="editor-actions">
+        <button id="btn_create_word_save" class="btn primary" type="button">
+          შენახვა
+        </button>
+      </div>
+    </div>
+  `;
+
+  const oldPosEl = $('#edit_pos');
+  if (oldPosEl) {
+    oldPosEl.id = 'create_pos';
+    oldPosEl.removeAttribute('data-old');
+  }
+
+  const btnCreateWordSave = $('#btn_create_word_save');
+  if (btnCreateWordSave) {
+    btnCreateWordSave.addEventListener('click', async () => {
+      await createWordFromForm();
+    });
+  }
+}
 
 // Функция для рендеринга карточки с деталями слова:
 function renderWordCard(data) {
   const panel = $('#details-panel');
+
+if (!panel) {
+    console.error('Элемент #details-panel не найден!');
+    return;
+  }
+
+
   const w = data?.word || null;
 
   if (!panel) return;
@@ -411,7 +886,12 @@ function renderWordCard(data) {
         <button id="btn_word_save" class="btn primary" type="button">
           შენახვა
         </button>
+
+        <button id="btn_word_delete" class="btn danger" type="button">
+          სიტყვის სრულად წაშლა
+        </button>
       </div>
+
     </div>
 
     <div class="uses-section">
@@ -425,54 +905,15 @@ function renderWordCard(data) {
   <div class="uses-list">
     ${usesHtml}
   </div>
+
+    <!-- Добавляем блок для грамматики -->
+    <div class="grammar-section">
+      ${renderGrammarHtml(data)}  <!-- Вставляем сгенерированный HTML для грамматики -->
+      <button id="btn_grammar_save" class="btn primary" type="button">შენახვა</button> <!-- Кнопка для сохранения -->
+    </div>
+
 </div>
   `;
-
-
-// Существующий код для рендеринга карточки
-panel.querySelector('.uses-list').innerHTML = usesHtml;
-
-// Добавляем синонимы
-panel.innerHTML += `
-  <div class="use-synonyms">
-    <div class="use-section-header">
-      <div class="use-section-title">Синонимы</div>
-      <button class="btn primary btn-add-synonym" type="button">Добавить синоним</button>
-    </div>
-    <div class="use-synonyms-list">
-      <!-- Здесь будут рендериться синонимы -->
-    </div>
-  </div>
-`;
-
-// Добавляем антонимы
-panel.innerHTML += `
-  <div class="use-antonyms">
-    <div class="use-section-header">
-      <div class="use-section-title">Антонимы</div>
-      <button class="btn primary btn-add-antonym" type="button">Добавить антоним</button>
-    </div>
-    <div class="use-antonyms-list">
-      <!-- Здесь будут рендериться антонимы -->
-    </div>
-  </div>
-`;
-
-// Добавляем идиомы
-panel.innerHTML += `
-  <div class="use-idioms">
-    <div class="use-section-header">
-      <div class="use-section-title">Идиомы</div>
-      <button class="btn primary btn-add-idiom" type="button">Добавить идиому</button>
-    </div>
-    <div class="use-idioms-list">
-      <!-- Здесь будут рендериться идиомы -->
-    </div>
-  </div>
-`;
-
-
-
 
   const posEl = $('#edit_pos');
   if (posEl) posEl.dataset.old = String(pos.id || '');
@@ -482,12 +923,20 @@ panel.innerHTML += `
     btnSave.addEventListener('click', () => saveWordFromForm(w.id));
   }
 
+  const btnWordDelete = $('#btn_word_delete');
+  if (btnWordDelete) {
+    btnWordDelete.addEventListener('click', async () => {
+      if (!confirm('ნამდვილად გსურთ სიტყვის სრულად წაშლა?')) return;
+      await deleteWord(w.id);
+    });
+  }
+
   const btnUseCreate = $('#btn_use_create');
-if (btnUseCreate) {
-  btnUseCreate.addEventListener('click', async () => {
-    await createUse(w.id);
-  });
-}
+  if (btnUseCreate) {
+    btnUseCreate.addEventListener('click', async () => {
+      await createUse(w.id);
+    });
+  }
 
   panel.querySelectorAll('.btn-use-save').forEach((btn) => {
     btn.addEventListener('click', async () => {
@@ -510,6 +959,9 @@ if (btnUseCreate) {
     await deleteUse(useId);
   });
 });
+
+bindRelatedButtons(panel);
+
 }
 
 async function saveWordFromForm(wordId) {
@@ -577,6 +1029,108 @@ if (!newPos || newPos === '13') {
 	await loadWordDetails(id);
 }
 
+async function createWordFromForm() {
+	const word = ($('#create_word')?.value || '').trim();
+	const word_view = ($('#create_word_view')?.value || '').trim();
+	const pos = String($('#create_pos')?.value || '');
+
+	if (!word) {
+		showPanelNotice(
+			'error',
+			'სიტყვის დამატება ვერ მოხერხდა',
+			'სიტყვა სავალდებულოა',
+			NOTICE_ERROR_MS,
+		);
+		return false;
+	}
+
+	if (!word_view) {
+		showPanelNotice(
+			'error',
+			'სიტყვის დამატება ვერ მოხერხდა',
+			'სიტყვის საჩვენებელი ფორმა სავალდებულოა',
+			NOTICE_ERROR_MS,
+		);
+		return false;
+	}
+
+	if (word.length > 30 || word_view.length > 30) {
+		showPanelNotice(
+			'error',
+			'სიტყვის დამატება ვერ მოხერხდა',
+			'მაქსიმალური სიგრძეა 30 სიმბოლო',
+			NOTICE_ERROR_MS,
+		);
+		return false;
+	}
+
+	if (!pos || pos === '13') {
+		showPanelNotice(
+			'error',
+			'სიტყვის დამატება ვერ მოხერხდა',
+			'აუცილებელია მეტყველების ნაწილის არჩევა',
+			NOTICE_ERROR_MS,
+		);
+		return false;
+	}
+
+	try {
+		const fd = new FormData();
+		fd.append('word', word);
+		fd.append('word_view', word_view);
+		fd.append('pos', pos);
+
+		const r = await apiFetchJson('api/word_create.php', {
+			method: 'POST',
+			body: fd,
+			headers: {
+				Accept: 'application/json',
+				'X-Requested-With': 'XMLHttpRequest',
+			},
+		});
+
+if (!r.res.ok || !r.json?.success) {
+    showPanelNotice(
+        'error',
+        'სიტყვის დამატება ვერ მოხერხდა',
+        r.json?.error || 'შეცდომა',
+        NOTICE_ERROR_MS,
+    );
+    return false;
+}
+
+const newId = Number(r.json?.created?.id || 0);
+if (!newId) {
+    showPanelNotice(
+        'error',
+        'სიტყვის დამატება ვერ მოხერხდა',
+        'ახალი ჩანაწერის იდენტიფიკატორი ვერ მოიძებნა',
+        NOTICE_ERROR_MS,
+    );
+    return false;
+}
+
+// Обновление currentWordId и загрузка карточки нового слова
+currentWordId = newId;
+await loadWordDetails(newId);  // Загружаем карточку нового слова
+
+showPanelNotice('success', 'სიტყვა დამატებულია', '', NOTICE_SUCCESS_MS);
+
+		await doSearch();
+
+		return true;
+	} catch (e) {
+		console.warn(e);
+		showPanelNotice(
+			'error',
+			'სიტყვის დამატება ვერ მოხერხდა',
+			'ქსელის ან სერვერის შეცდომა',
+			NOTICE_ERROR_MS,
+		);
+		return false;
+	}
+}
+
 async function saveUseFromCard(cardEl) {
 	const useId = Number(cardEl?.dataset?.useId || 0);
 	if (!useId) return false;
@@ -588,6 +1142,10 @@ async function saveUseFromCard(cardEl) {
 	const tema1 = String(cardEl.querySelector('.use-tema1')?.value || '').trim();
 	const tema2 = String(cardEl.querySelector('.use-tema2')?.value || '').trim();
 	const tema3 = String(cardEl.querySelector('.use-tema3')?.value || '').trim();
+
+	const synonyms = collectSynonymsFromCard(cardEl);
+	const antonyms = collectAntonymsFromCard(cardEl);
+	const idioms = collectIdiomsFromCard(cardEl);
 
 	const ok = await sendUseUpdate({
 		id: useId,
@@ -601,6 +1159,21 @@ async function saveUseFromCard(cardEl) {
 	});
 
 	if (!ok) return false;
+
+	try {
+		await sendSynonymsSave(useId, synonyms);
+		await sendAntonymsSave(useId, antonyms);
+		await sendIdiomsSave(useId, idioms);
+	} catch (e) {
+		console.warn(e);
+		showPanelNotice(
+			'error',
+			'გამოყენების შენახვა ვერ მოხერხდა',
+			e.message || 'დაკავშირებული მონაცემების შენახვის შეცდომა',
+			NOTICE_ERROR_MS,
+		);
+		return false;
+	}
 
 	showPanelNotice('success', 'გამოყენება შენახულია', '', NOTICE_SUCCESS_MS);
 
@@ -673,7 +1246,7 @@ async function deleteUse(useId) {
     const fd = new FormData();
     fd.append('id', String(useId));
 
-    const r = await apiFetchJson('api/use_delete.php', {
+    const r = await apiFetchJson('api/с.php', {
       method: 'POST',
       body: fd,
       headers: {
@@ -703,6 +1276,54 @@ async function deleteUse(useId) {
     showPanelNotice(
       'error',
       'გამოყენების წაშლა ვერ მოხერხდა',
+      'ქსელის ან სერვერის შეცდომა',
+      NOTICE_ERROR_MS
+    );
+  }
+}
+
+async function deleteWord(wordId) {
+  const id = Number(wordId || 0);
+  if (!id) return;
+
+  try {
+    const fd = new FormData();
+    fd.append('id', String(id));
+
+    const r = await apiFetchJson('api/word_delete.php', {
+      method: 'POST',
+      body: fd,
+      headers: {
+        Accept: 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    });
+
+    if (!r.res.ok || !r.json?.success) {
+      showPanelNotice(
+        'error',
+        'სიტყვის წაშლა ვერ მოხერხდა',
+        r.json?.error || 'შეცდომა',
+        NOTICE_ERROR_MS
+      );
+      return;
+    }
+
+    currentWordId = 0;
+
+    const panel = $('#details-panel');
+    if (panel) {
+      panel.innerHTML = '<div class="center-message">სიტყვა წაიშალა</div>';
+    }
+
+    showPanelNotice('success', 'სიტყვა წაიშალა', '', NOTICE_SUCCESS_MS);
+
+    await doSearch();
+  } catch (e) {
+    console.warn(e);
+    showPanelNotice(
+      'error',
+      'სიტყვის წაშლა ვერ მოხერხდა',
       'ქსელის ან სერვერის შეცდომა',
       NOTICE_ERROR_MS
     );
@@ -833,10 +1454,20 @@ function init() {
 	$('#form_Search').addEventListener('input', () =>
 		debounce(doSearch, DEBOUNCE_MS),
 	);
+
 	['#form_level', '#form_part_of_speech', '#form_tema'].forEach((sel) => {
 		const el = $(sel);
 		if (el) el.addEventListener('change', doSearch);
 	});
+
+	const btnWordCreate = $('#btn_word_create');
+	if (btnWordCreate) {
+		btnWordCreate.addEventListener('click', () => {
+			currentWordId = 0;
+			renderCreateWordForm();
+		});
+	}
+
 	doSearch();
 }
 

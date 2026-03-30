@@ -10,6 +10,28 @@ function jerr(string $msg, int $code = 500): void {
     exit;
 }
 
+/**
+ * Возвращает имя грамматической таблицы по ID части речи.
+ */
+function grammar_table_for_pos(int $posId): ?string
+{
+    return match ($posId) {
+        1  => 'noun',
+        2  => 'adjective',
+        3  => 'numeral',
+        4  => 'pronoun',
+        5  => 'verb',
+        6  => 'verbnoun',
+        7  => 'participle',
+        8  => 'adverb',
+        9  => 'particle',
+        10 => 'conjunction',
+        11 => 'postposition',
+        12 => 'interjection',
+        default => null,
+    };
+}
+
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($id <= 0) jerr('Bad id', 400);
 
@@ -31,6 +53,7 @@ try {
         '10'=>'Conjunction','11'=>'Postposition','12'=>'Interjection',
     ];
     $posEn = $posEnMap[$posId] ?? '—';
+    $grammarTable = grammar_table_for_pos((int)$posId);
 
     // === 2) все употребления (use) для слова
     $sqlUse = "SELECT 
@@ -56,6 +79,20 @@ try {
                  FROM `idiom` AS i
                  WHERE i.use_ID = :use_id
                  ORDER BY i.id ASC";
+
+    $sqlGrammar = "SELECT * FROM `$grammarTable` WHERE word_ID = :id LIMIT 1";
+    $stGrammar = $pdo->prepare($sqlGrammar);
+    $stGrammar->execute([':id' => $id]);
+    $grammar = $stGrammar->fetch(PDO::FETCH_ASSOC); 
+
+    if (!$grammar) {
+        $stInsertGrammar = $pdo->prepare("INSERT INTO `$grammarTable` (word_ID) VALUES (:id)");
+        $stInsertGrammar->execute([':id' => $id]);
+
+        // Повторный запрос для получения только что вставленной записи
+        $stGrammar->execute([':id' => $id]);
+        $grammar = $stGrammar->fetch(PDO::FETCH_ASSOC);
+    }
 
     $stSyn = $pdo->prepare($synSql);
     $stAnt = $pdo->prepare($antSql);
@@ -141,11 +178,11 @@ try {
         ];
     }
 
-    echo json_encode([
+echo json_encode([
     'success' => true,
     'word' => [
-        'id'        => (int)$word['id'],
-        'word'      => (string)$word['word'],
+        'id' => (int)$word['id'],
+        'word' => (string)$word['word'],
         'word_view' => (string)$word['word_view'],
         'part_of_speech' => [
             'id' => (int)$posId,
@@ -157,8 +194,10 @@ try {
     'meta' => [
         'levels' => $metaLevels,
         'topics' => $metaTopics,
-        ]
-    ], JSON_UNESCAPED_UNICODE);
+    ],
+    'grammar' => $grammar,
+    'grammar_table' => $grammarTable,
+], JSON_UNESCAPED_UNICODE);
 
 } catch (Throwable $e) {
     if ($DEBUG) jerr('DB error: ' . $e->getMessage(), 500);

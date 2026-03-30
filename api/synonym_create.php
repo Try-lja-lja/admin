@@ -5,15 +5,15 @@ require_once __DIR__ . '/bootstrap.php';
 $useId = isset($_POST['use_id']) ? (int)$_POST['use_id'] : 0;
 if ($useId <= 0) api_error('Bad use_id', 400);
 
-$items = $_POST['items'] ?? null;
-if (!is_array($items)) api_error('items must be array', 400);
+$items = $_POST['items'] ?? [];
+if (!is_array($items)) api_error('მონაცემები უნდა იყოს მასივი', 400);
 
 // нормализация + защита от дублей
 $norm = [];
 foreach ($items as $s) {
     $v = trim((string)$s);
     if ($v === '') continue;
-    if (mb_strlen($v, 'UTF-8') > 30) api_error('Синоним не должен превышать 30 символов', 400);
+    if (mb_strlen($v, 'UTF-8') > 30) api_error('სინონიმი არ უნდა აღემატებოდეს 30 სიმბოლოს', 400);
     $norm[$v] = true; // убираем дубли
 }
 $list = array_keys($norm);

@@ -358,3 +358,47 @@ body {
   outline: none;
   box-shadow: 0 0 0 2px rgba(120, 20, 20, 0.15);
 }
+
+/* ===== related blocks (synonyms / antonyms / idioms) ===== */
+
+.use-row-related-header {
+  margin-top: 14px;
+}
+
+.use-related-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.use-related-line {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.use-related-line input {
+  flex: 1;
+}
+
+/* ===== idioms ===== */
+
+.use-idiom-block {
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.use-idiom-block .use-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+.use-idiom-block textarea {
+  width: 100%;
+  resize: vertical;
+}

@@ -5,21 +5,15 @@ require_once __DIR__ . '/bootstrap.php';
 $useId = isset($_POST['use_id']) ? (int)$_POST['use_id'] : 0;
 if ($useId <= 0) api_error('Bad use_id', 400);
 
-$items = $_POST['items'] ?? null;
-/*
-items = [
-  ['idiom'=>'...', 'interpretation'=>'...', 'use'=>'...'],
-  ...
-]
-*/
-if (!is_array($items)) api_error('items must be array', 400);
+$items = $_POST['items'] ?? [];
+if (!is_array($items)) api_error('მონაცემები უნდა იყოს მასივი', 400);
 
 $clean = [];
 foreach ($items as $it) {
     if (!is_array($it)) continue;
     $idiom = trim((string)($it['idiom'] ?? ''));
     if ($idiom === '') continue; // обязательное
-    if (mb_strlen($idiom, 'UTF-8') > 30) api_error('Idiom не должен превышать 30 символов', 400);
+    if (mb_strlen($idiom, 'UTF-8') > 100) api_error('იდიომა არ უნდა აღემატებოდეს 100 სიმბოლოს', 400);
 
     // защита от дублей по идиоме (простая)
     $key = $idiom;
