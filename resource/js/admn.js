@@ -622,13 +622,13 @@ console.log('Part of speech ID:', posId);  // Лог для проверки
           <h4 class="gray">ბრუნება</h4>
           <table class="table">
             <tr><td>&nbsp;</td><td class="gray">მხოლობითი რიცხვი</td><td class="gray">მრავლობითი რიცხვი</td></tr>
-            <tr><td class="gray">სახელობითი</td><td>${data.word.word}</td><td><input type="text" maxlength="45" value="${data.grammar.nominative_p || '—'}"></td></tr>
-            <tr><td class="gray">მოთხრობითი</td><td><input type="text" maxlength="45" value="${data.grammar.ergative_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.ergative_p || '—'}"></td></tr>
-            <tr><td class="gray">მიცემითი</td><td><input type="text" maxlength="45" value="${data.grammar.dative_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.dative_p || '—'}"></td></tr>
-            <tr><td class="gray">ნათესაობითი</td><td><input type="text" maxlength="45" value="${data.grammar.genetive_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.genetive_p || '—'}"></td></tr>
-            <tr><td class="gray">მოქმედებითი</td><td><input type="text" maxlength="45" value="${data.grammar.instrumental_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.instrumental_p || '—'}"></td></tr>
-            <tr><td class="gray">ვითარებითი</td><td><input type="text" maxlength="45" value="${data.grammar.transformative_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.transformative_p || '—'}"></td></tr>
-            <tr><td class="gray">წოდებითი</td><td><input type="text" maxlength="45" value="${data.grammar.vocative_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.vacative_p || '—'}"></td></tr>
+            <tr><td class="gray">სახელობითი</td><td>${data.word.word}</td><td><input id="noun_nominative_p" type="text" maxlength="45" value="${data.grammar.nominative_p || '—'}"></td></tr>
+            <tr><td class="gray">მოთხრობითი</td><td><input id="noun_ergative_s" type="text" maxlength="45" value="${data.grammar.ergative_s || '—'}"></td><td><input id="noun_ergative_p" type="text" maxlength="45" value="${data.grammar.ergative_p || '—'}"></td></tr>
+            <tr><td class="gray">მიცემითი</td><td><input id="noun_dative_s" type="text" maxlength="45" value="${data.grammar.dative_s || '—'}"></td><td><input id="noun_dative_p" type="text" maxlength="45" value="${data.grammar.dative_p || '—'}"></td></tr>
+            <tr><td class="gray">ნათესაობითი</td><td><input id="noun_genetive_s" type="text" maxlength="45" value="${data.grammar.genetive_s || '—'}"></td><td><input id="noun_genetive_p" type="text" maxlength="45" value="${data.grammar.genetive_p || '—'}"></td></tr>
+            <tr><td class="gray">მოქმედებითი</td><td><input id="noun_instrumental_s" type="text" maxlength="45" value="${data.grammar.instrumental_s || '—'}"></td><td><input id="noun_instrumental_p" type="text" maxlength="45" value="${data.grammar.instrumental_p || '—'}"></td></tr>
+            <tr><td class="gray">ვითარებითი</td><td><input id="noun_transformative_s" type="text" maxlength="45" value="${data.grammar.transformative_s || '—'}"></td><td><input id="noun_transformative_p" type="text" maxlength="45" value="${data.grammar.transformative_p || '—'}"></td></tr>
+            <tr><td class="gray">წოდებითი</td><td><input id="noun_vocative_s" type="text" maxlength="45" value="${data.grammar.vocative_s || '—'}"></td><td><input id="noun_vacative_p" type="text" maxlength="45" value="${data.grammar.vacative_p || '—'}"></td></tr>
           </table>
         `;
         break;
@@ -641,22 +641,22 @@ console.log('Part of speech ID:', posId);  // Лог для проверки
           <h4 class="gray">გრამატიკული დახასიათება</h4>
           <table class="table">
             <tr><td></td><td class="gray">ხარისხის ფორმები</td></tr>
-            <tr><td class="gray">დადებითი</td><td><input type="text" maxlength="45" value="${data.grammar.normal_degree || '—'}"></td></tr>
-            <tr><td class="gray">ოდნაობითი</td><td><input type="text" maxlength="45" value="${data.grammar.comparative_degree || '—'}"></td></tr>
-            <tr><td class="gray">უფროობითი</td><td><input type="text" maxlength="45" value="${data.grammar.superlative_degree || '—'}"></td></tr>
+            <tr><td class="gray">დადებითი</td><td><input id="adjective_normal_degree" type="text" maxlength="45" value="${data.grammar.normal_degree || '—'}"></td></tr>
+            <tr><td class="gray">ოდნაობითი</td><td><input id="adjective_comparative_degree" type="text" maxlength="45" value="${data.grammar.comparative_degree || '—'}"></td></tr>
+            <tr><td class="gray">უფროობითი</td><td><input id="adjective_superlative_degree" type="text" maxlength="45" value="${data.grammar.superlative_degree || '—'}"></td></tr>
           </table>
 
 <h4 class="gray">ბრუნება</h4>
 
           <table class="table">
             <tr><td>&nbsp;</td><td class="gray">მხოლობითი რიცხვი</td><td class="gray">მრავლობითი რიცხვი</td></tr>
-            <tr><td class="gray">სახელობითი</td><td>${data.word.word}</td><td><input type="text" maxlength="45" value="${data.grammar.nominative_p || '—'}"></td></tr>
-            <tr><td class="gray">მოთხრობითი</td><td><input type="text" maxlength="45" value="${data.grammar.ergative_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.ergative_p || '—'}"></td></tr>
-            <tr><td class="gray">მიცემითი</td><td><input type="text" maxlength="45" value="${data.grammar.dative_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.dative_p || '—'}"></td></tr>
-            <tr><td class="gray">ნათესაობითი</td><td><input type="text" maxlength="45" value="${data.grammar.genetive_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.genetive_p || '—'}"></td></tr>
-            <tr><td class="gray">მოქმედებითი</td><td><input type="text" maxlength="45" value="${data.grammar.instrumental_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.instrumental_p || '—'}"></td></tr>
-            <tr><td class="gray">ვითარებითი</td><td><input type="text" maxlength="45" value="${data.grammar.transformative_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.transformative_p || '—'}"></td></tr>
-            <tr><td class="gray">წოდებითი</td><td><input type="text" maxlength="45" value="${data.grammar.vocative_s || '—'}"></td><td><input type="text" maxlength="45" value="${data.grammar.vacative_p || '—'}"></td></tr>
+            <tr><td class="gray">სახელობითი</td><td>${data.word.word}</td><td><input id="adjective_nominative_p" type="text" maxlength="45" value="${data.grammar.nominative_p || '—'}"></td></tr>
+            <tr><td class="gray">მოთხრობითი</td><td><input id="adjective_ergative_s" type="text" maxlength="45" value="${data.grammar.ergative_s || '—'}"></td><td><input id="adjective_ergative_p" type="text" maxlength="45" value="${data.grammar.ergative_p || '—'}"></td></tr>
+            <tr><td class="gray">მიცემითი</td><td><input id="adjective_dative_s" type="text" maxlength="45" value="${data.grammar.dative_s || '—'}"></td><td><input id="adjective_dative_p" type="text" maxlength="45" value="${data.grammar.dative_p || '—'}"></td></tr>
+            <tr><td class="gray">ნათესაობითი</td><td><input id="adjective_genetive_s" type="text" maxlength="45" value="${data.grammar.genetive_s || '—'}"></td><td><input id="adjective_genetive_p" type="text" maxlength="45" value="${data.grammar.genetive_p || '—'}"></td></tr>
+            <tr><td class="gray">მოქმედებითი</td><td><input id="adjective_instrumental_s" type="text" maxlength="45" value="${data.grammar.instrumental_s || '—'}"></td><td><input id="adjective_instrumental_p" type="text" maxlength="45" value="${data.grammar.instrumental_p || '—'}"></td></tr>
+            <tr><td class="gray">ვითარებითი</td><td><input id="adjective_transformative_s" type="text" maxlength="45" value="${data.grammar.transformative_s || '—'}"></td><td><input id="adjective_transformative_p" type="text" maxlength="45" value="${data.grammar.transformative_p || '—'}"></td></tr>
+            <tr><td class="gray">წოდებითი</td><td><input id="adjective_vocative_s" type="text" maxlength="45" value="${data.grammar.vocative_s || '—'}"></td><td><input id="adjective_vocative_p" type="text" maxlength="45" value="${data.grammar.vocative_p || '—'}"></td></tr>
           </table>
         `;
         break;
@@ -668,8 +668,8 @@ console.log('Part of speech ID:', posId);  // Лог для проверки
           <h3>გრამატიკა - რიცხვითი სახელი</h3>
 
           <div class="field">
-        <label for="numeral-kind" class="gray">ჯგუფი</label>
-        <select id="numeral-kind">
+        <label for="numeral_kind" class="gray">ჯგუფი</label>
+        <select id="numeral_kind">
           <option value="1" ${data.grammar.kind === '1' ? 'selected' : ''}>რაოდენობითი</option>
           <option value="2" ${data.grammar.kind === '2' ? 'selected' : ''}>რიგობითი</option>
           <option value="3" ${data.grammar.kind === '3' ? 'selected' : ''}>წილობითი</option>
@@ -680,12 +680,12 @@ console.log('Part of speech ID:', posId);  // Лог для проверки
 <h4 class="gray">ბრუნება</h4>
       <table class="table">
         <tr><td>სახელობითი</td><td>${data.word.word}</td></tr>
-        <tr><td>მოთხრობითი</td><td><input type="text" maxlength="45" value="${data.grammar.ergative_s || '—'}"></td></tr>
-        <tr><td>მიცემითი</td><td><input type="text" maxlength="45" value="${data.grammar.dative_s || '—'}"></td></tr>
-        <tr><td>ნათესაობითი</td><td><input type="text" maxlength="45" value="${data.grammar.genetive_s || '—'}"></td></tr>
-        <tr><td>მოქმედებითი</td><td><input type="text" maxlength="45" value="${data.grammar.instrumental_s || '—'}"></td></tr>
-        <tr><td>ვითარებითი</td><td><input type="text" maxlength="45" value="${data.grammar.transformative_s || '—'}"></td></tr>
-        <tr><td>წოდებითი</td><td><input type="text" maxlength="45" value="${data.grammar.vocative_s || '—'}"></td></tr>
+        <tr><td>მოთხრობითი</td><td><input id="numeral_ergative_s" type="text" maxlength="45" value="${data.grammar.ergative_s || '—'}"></td></tr>
+        <tr><td>მიცემითი</td><td><input id="numeral_dative_s" type="text" maxlength="45" value="${data.grammar.dative_s || '—'}"></td></tr>
+        <tr><td>ნათესაობითი</td><td><input id="numeral_genetive_s" type="text" maxlength="45" value="${data.grammar.genetive_s || '—'}"></td></tr>
+        <tr><td>მოქმედებითი</td><td><input id="numeral_instrumental_s" type="text" maxlength="45" value="${data.grammar.instrumental_s || '—'}"></td></tr>
+        <tr><td>ვითარებითი</td><td><input id="numeral_transformative_s" type="text" maxlength="45" value="${data.grammar.transformative_s || '—'}"></td></tr>
+        <tr><td>წოდებითი</td><td><input id="numeral_vocative_s" type="text" maxlength="45" value="${data.grammar.vocative_s || '—'}"></td></tr>
       </table>
         `;
         break;
@@ -697,8 +697,8 @@ console.log('Part of speech ID:', posId);  // Лог для проверки
           <h3>გრამატიკა - ნაცვალსახელი</h3>
           <h4 class="gray">გრამატიკული დახასიათება</h4>
       <div class="field">
-        <label for="pronoun-characteristic" class="gray">ჯგუფი</label>
-        <input type="text" id="pronoun-characteristic" value="${data.grammar.characteristic || '—'}">
+        <label for="pronoun_characteristic" class="gray">ჯგუფი</label>
+        <input type="text" id="pronoun_characteristic" value="${data.grammar.characteristic || '—'}">
       </div>
 
       <h4 class="gray">ბრუნება</h4>
@@ -714,37 +714,37 @@ console.log('Part of speech ID:', posId);  // Лог для проверки
           <tr>
             <td class="gray">სახელობითი</td>
             <td>${data.word.word}</td>
-            <td><input type="text" maxlength="45" value="${data.grammar.nominative_p || '—'}"></td>
+            <td><input id="pronoun_nominative_p" type="text" maxlength="45" value="${data.grammar.nominative_p || '—'}"></td>
           </tr>
           <tr>
             <td class="gray">მოთხრობითი</td>
-            <td><input type="text" maxlength="45" value="${data.grammar.ergative_s || '—'}"></td>
-            <td><input type="text" maxlength="45" value="${data.grammar.ergative_p || '—'}"></td>
+            <td><input id="pronoun_ergative_s" type="text" maxlength="45" value="${data.grammar.ergative_s || '—'}"></td>
+            <td><input id="pronoun_ergative_p" type="text" maxlength="45" value="${data.grammar.ergative_p || '—'}"></td>
           </tr>
           <tr>
             <td class="gray">მიცემითი</td>
-            <td><input type="text" maxlength="45" value="${data.grammar.dative_s || '—'}"></td>
-            <td><input type="text" maxlength="45" value="${data.grammar.dative_p || '—'}"></td>
+            <td><input id="pronoun_dative_s" type="text" maxlength="45" value="${data.grammar.dative_s || '—'}"></td>
+            <td><input id="pronoun_dative_p" type="text" maxlength="45" value="${data.grammar.dative_p || '—'}"></td>
           </tr>
           <tr>
             <td class="gray">ნათესაობითი</td>
-            <td><input type="text" maxlength="45" value="${data.grammar.genetive_s || '—'}"></td>
-            <td><input type="text" maxlength="45" value="${data.grammar.genetive_p || '—'}"></td>
+            <td><input id="pronoun_genetive_s" type="text" maxlength="45" value="${data.grammar.genetive_s || '—'}"></td>
+            <td><input id="pronoun_genetive_p" type="text" maxlength="45" value="${data.grammar.genetive_p || '—'}"></td>
           </tr>
           <tr>
             <td class="gray">მოქმედებითი</td>
-            <td><input type="text" maxlength="45" value="${data.grammar.instrumental_s || '—'}"></td>
-            <td><input type="text" maxlength="45" value="${data.grammar.instrumental_p || '—'}"></td>
+            <td><input id="pronoun_instrumental_s" type="text" maxlength="45" value="${data.grammar.instrumental_s || '—'}"></td>
+            <td><input id="pronoun_instrumental_p" type="text" maxlength="45" value="${data.grammar.instrumental_p || '—'}"></td>
           </tr>
           <tr>
             <td class="gray">ვითარებითი</td>
-            <td><input type="text" maxlength="45" value="${data.grammar.transformative_s || '—'}"></td>
-            <td><input type="text" maxlength="45" value="${data.grammar.transformative_p || '—'}"></td>
+            <td><input id="pronoun_transformative_s" type="text" maxlength="45" value="${data.grammar.transformative_s || '—'}"></td>
+            <td><input id="pronoun_transformative_p" type="text" maxlength="45" value="${data.grammar.transformative_p || '—'}"></td>
           </tr>
           <tr>
             <td class="gray">წოდებითი</td>
-            <td><input type="text" maxlength="45" value="${data.grammar.vocative_s || '—'}"></td>
-            <td><input type="text" maxlength="45" value="${data.grammar.vocative_p || '—'}"></td>
+            <td><input id="pronoun_vocative_s" type="text" maxlength="45" value="${data.grammar.vocative_s || '—'}"></td>
+            <td><input id="pronoun_vocative_p" type="text" maxlength="45" value="${data.grammar.vocative_p || '—'}"></td>
           </tr>
         </tbody>
       </table>
@@ -760,13 +760,13 @@ case 5:
         <h3>გრამატიკა - ზმნა</h3>
 
         <div class="field">
-            <label for="infinitive" class="gray">საწყისი</label>
-            <input type="text" id="infinitive" value="${data.grammar.infinitive || '—'}">
+            <label for="verb_infinitive" class="gray">საწყისი</label>
+            <input type="text" id="verb_infinitive" value="${data.grammar.infinitive || '—'}">
         </div>
 
         <div class="field">
-            <label for="transilive_intransilive" class="gray">გარდამავლობა</label>
-            <select id="transilive_intransilive">
+            <label for="verb_transilive_intransilive" class="gray">გარდამავლობა</label>
+            <select id="verb_transilive_intransilive">
                 <option value="1" ${data.grammar.transilive_intransilive === '1' ? 'selected' : ''}>გარდამავალი</option>
                 <option value="2" ${data.grammar.transilive_intransilive === '2' ? 'selected' : ''}>გარდაუვალი</option>
                 <option value="3" ${data.grammar.transilive_intransilive === '3' ? 'selected' : ''}>პირნაკლი</option>
@@ -774,8 +774,8 @@ case 5:
         </div>
 
         <div class="field">
-            <label for="voice" class="gray">გვარი</label>
-            <select id="voice">
+            <label for="verb_voice" class="gray">გვარი</label>
+            <select id="verb_voice">
                 <option value="1" ${data.grammar.voice === '1' ? 'selected' : ''}>მოქმედებითი</option>
                 <option value="2" ${data.grammar.voice === '2' ? 'selected' : ''}>დინამიკური ვნებითი</option>
                 <option value="3" ${data.grammar.voice === '3' ? 'selected' : ''}>სტატიკური ვნებითი</option>
@@ -786,8 +786,8 @@ case 5:
         </div>
 
         <div class="field">
-            <label for="peculiarity" class="gray">თავისებურება</label>
-            <select id="peculiarity">
+            <label for="verb_peculiarity" class="gray">თავისებურება</label>
+            <select id="verb_peculiarity">
                 <option value="0" ${data.grammar.peculiarity === '0' ? 'selected' : ''}>არ არის გამონაკლისი</option>
                 <option value="1" ${data.grammar.peculiarity === '1' ? 'selected' : ''}>გამონაკლისი</option>
             </select>
@@ -795,17 +795,17 @@ case 5:
 
         <h4 class="gray">უღლება</h4>
         <table class="table">
-            <tr><td class="gray">აწმყო</td><td><textarea maxlength="250">${data.grammar.present_lindicative || '—'}</textarea></td></tr>
-            <tr><td class="gray">უწყვეტელი</td><td><textarea maxlength="250">${data.grammar.imperfect || '—'}</textarea></td></tr>
-            <tr><td class="gray">აწმყოს კავშირებითი</td><td><textarea maxlength="250">${data.grammar.present_stubjunctive || '—'}</textarea></td></tr>
-            <tr><td class="gray">მყოფადი</td><td><textarea maxlength="250">${data.grammar.future || '—'}</textarea></td></tr>
-            <tr><td class="gray">ხოლმეობითი</td><td><textarea maxlength="250">${data.grammar.conditional || '—'}</textarea></td></tr>
-            <tr><td class="gray">მყოფადის კავშირებითი</td><td><textarea maxlength="250">${data.grammar.future_subjunctive || '—'}</textarea></td></tr>
-            <tr><td class="gray">წყვეტილი</td><td><textarea maxlength="250">${data.grammar.aorist || '—'}</textarea></td></tr>
-            <tr><td class="gray">II კავშირებითი</td><td><textarea maxlength="250">${data.grammar.conjuctive_II || '—'}</textarea></td></tr>
-            <tr><td class="gray">I თურმეობითი</td><td><textarea maxlength="250">${data.grammar.resultative_I || '—'}</textarea></td></tr>
-            <tr><td class="gray">II თურმეობითი</td><td><textarea maxlength="250">${data.grammar.resultative_II || '—'}</textarea></td></tr>
-            <tr><td class="gray">III თურმეობითი</td><td><textarea maxlength="250">${data.grammar.conjuctive_III || '—'}</textarea></td></tr>
+            <tr><td class="gray">აწმყო</td><td><textarea id="verb_present_lindicative" maxlength="250">${data.grammar.present_lindicative || '—'}</textarea></td></tr>
+            <tr><td class="gray">უწყვეტელი</td><td><textarea id="verb_imperfect" maxlength="250">${data.grammar.imperfect || '—'}</textarea></td></tr>
+            <tr><td class="gray">აწმყოს კავშირებითი</td><td><textarea id="verb_present_stubjunctive" maxlength="250">${data.grammar.present_stubjunctive || '—'}</textarea></td></tr>
+            <tr><td class="gray">მყოფადი</td><td><textarea id="verb_future" maxlength="250">${data.grammar.future || '—'}</textarea></td></tr>
+            <tr><td class="gray">ხოლმეობითი</td><td><textarea id="verb_conditional" maxlength="250">${data.grammar.conditional || '—'}</textarea></td></tr>
+            <tr><td class="gray">მყოფადის კავშირებითი</td><td><textarea id="verb_future_subjunctive" maxlength="250">${data.grammar.future_subjunctive || '—'}</textarea></td></tr>
+            <tr><td class="gray">წყვეტილი</td><td><textarea id="verb_aorist" maxlength="250">${data.grammar.aorist || '—'}</textarea></td></tr>
+            <tr><td class="gray">II კავშირებითი</td><td><textarea id="verb_conjuctive_II" maxlength="250">${data.grammar.conjuctive_II || '—'}</textarea></td></tr>
+            <tr><td class="gray">I თურმეობითი</td><td><textarea id="verb_resultative_I" maxlength="250">${data.grammar.resultative_I || '—'}</textarea></td></tr>
+            <tr><td class="gray">II თურმეობითი</td><td><textarea id="verb_resultative_II" maxlength="250">${data.grammar.resultative_II || '—'}</textarea></td></tr>
+            <tr><td class="gray">III თურმეობითი</td><td><textarea id="verb_conjuctive_III" maxlength="250">${data.grammar.conjuctive_III || '—'}</textarea></td></tr>
         </table>
         `;
         break;
@@ -818,51 +818,46 @@ case 5:
           <h4 class="gray">გრამატიკული დახასიათება</h4>
 
         <div class="field">
-        <label for="pronoun-characteristic" class="gray">ზმნ(ებ)ისა</label>
-        <input type="text" id="pronoun-characteristic" value="${data.grammar.verb || '—'}">
+        <label for="verbnoun_verb" class="gray">ზმნ(ებ)ისა</label>
+        <input type="text" id="verbnoun_verb" value="${data.grammar.verb || '—'}">
       </div>
         
         <h4 class="gray">ბრუნება</h4>
         <table class="table">
             <tr><td class="gray">სახელობითი</td><td>${data.word.word}</td></tr>
-            <tr><td class="gray">მოთხრობითი</td><td><input type="text" maxlength="25" value="${data.grammar.ergative_s || '—'}"></td></tr>
-            <tr><td class="gray">მიცემითი</td><td><input type="text" maxlength="25" value="${data.grammar.dative_s || '—'}"></td></tr>
-            <tr><td class="gray">ნათესაობითი</td><td><input type="text" maxlength="25" value="${data.grammar.genetive_s || '—'}"></td></tr>
-            <tr><td class="gray">მოქმედებითი</td><td><input type="text" maxlength="25" value="${data.grammar.instrumental_s || '—'}"></td></tr>
-            <tr><td class="gray">ვითარებითი</td><td><input type="text" maxlength="25" value="${data.grammar.transformative_s || '—'}"></td></tr>
-            <tr><td class="gray">წოდებითი</td><td><input type="text" maxlength="25" value="${data.grammar.vocative_s || '—'}"></td></tr>
+            <tr><td class="gray">მოთხრობითი</td><td><input id="verbnoun_ergative_s" type="text" maxlength="25" value="${data.grammar.ergative_s || '—'}"></td></tr>
+            <tr><td class="gray">მიცემითი</td><td><input id="verbnoun_dative_s" type="text" maxlength="25" value="${data.grammar.dative_s || '—'}"></td></tr>
+            <tr><td class="gray">ნათესაობითი</td><td><input id="verbnoun_genetive_s" type="text" maxlength="25" value="${data.grammar.genetive_s || '—'}"></td></tr>
+            <tr><td class="gray">მოქმედებითი</td><td><input id="verbnoun_instrumental_s" type="text" maxlength="25" value="${data.grammar.instrumental_s || '—'}"></td></tr>
+            <tr><td class="gray">ვითარებითი</td><td><input id="verbnoun_transformative_s" type="text" maxlength="25" value="${data.grammar.transformative_s || '—'}"></td></tr>
+            <tr><td class="gray">წოდებითი</td><td><input id="verbnoun_vocative_s" type="text" maxlength="25" value="${data.grammar.vocative_s || '—'}"></td></tr>
         </table>
         `;
         break;
 
 // Причастие (participle)
 case 7:
-    console.log('Inside case 7:', posId);
-
-    const participleVoiceMap = {
-    "1": "მოქმედებითი",
-    "2": "ვნებითი,წარსული დრო (1)",
-    "3": "ვნებითი,წარსული დრო (2)",
-    "4": "ვნებითი, მომავალი დრო",
-    "5": "ვნებითი, უარყოფითი ფორმა",
-    "6": "საშუალი"
-};
-
-const participleVoiceValue =
-    participleVoiceMap[String(data.grammar.voice || '')] || '—';
+    // console.log('Inside case 7:', posId);
 
     // Добавляем разметку
     grammarHtml += `
         <h3>გრამატიკა - მიმღეობა</h3>
         <h4 class="gray">გრამატიკული დახასიათება</h4>
         <div class="field">
-            <label for="pronoun-characteristic" class="gray">ზმნ(ებ)ისა</label>
-            <input type="text" id="pronoun-characteristic" value="${data.grammar.verb || '—'}">
+            <label for="participle_verb" class="gray">ზმნ(ებ)ისა</label>
+            <input type="text" id="participle_verb" value="${data.grammar.verb || '—'}">
         </div>
 
         <div class="field">
-            <label for="voice" class="gray">გვარი</label>
-            <input type="text" id="voice" value="${participleVoiceValue}">
+            <label for="participle_voice" class="gray">გვარი</label>
+            <select id="participle_voice">
+                <option value="1" ${String(data.grammar.voice) === '1' ? 'selected' : ''}>მოქმედებითი</option>
+                <option value="2" ${String(data.grammar.voice) === '2' ? 'selected' : ''}>ვნებითი,წარსული დრო (1)</option>
+                <option value="3" ${String(data.grammar.voice) === '3' ? 'selected' : ''}>ვნებითი,წარსული დრო (2)</option>
+                <option value="4" ${String(data.grammar.voice) === '4' ? 'selected' : ''}>ვნებითი, მომავალი დრო</option>
+                <option value="5" ${String(data.grammar.voice) === '5' ? 'selected' : ''}>ვნებითი, უარყოფითი ფორმა</option>
+                <option value="6" ${String(data.grammar.voice) === '6' ? 'selected' : ''}>საშუალი</option>
+            </select>
         </div>
 
         <h4 class="gray">ბრუნება</h4>
@@ -875,13 +870,13 @@ const participleVoiceValue =
                 </tr>
             </thead>
             <tbody>
-                <tr><td class="gray">სახელობითი</td><td>${data.word.word}</td><td><input type="text" maxlength="25" value="${data.grammar.nominative_p || '—'}"></td></tr>
-                <tr><td class="gray">მოთხრობითი</td><td><input type="text" maxlength="25" value="${data.grammar.ergative_s || '—'}"></td><td><input type="text" maxlength="25" value="${data.grammar.ergative_p || '—'}"></td></tr>
-                <tr><td class="gray">მიცემითი</td><td><input type="text" maxlength="25" value="${data.grammar.dative_s || '—'}"></td><td><input type="text" maxlength="25" value="${data.grammar.dative_p || '—'}"></td></tr>
-                <tr><td class="gray">ნათესაობითი</td><td><input type="text" maxlength="25" value="${data.grammar.genetive_s || '—'}"></td><td><input type="text" maxlength="25" value="${data.grammar.genetive_p || '—'}"></td></tr>
-                <tr><td class="gray">მოქმედებითი</td><td><input type="text" maxlength="25" value="${data.grammar.instrumental_s || '—'}"></td><td><input type="text" maxlength="25" value="${data.grammar.instrumental_p || '—'}"></td></tr>
-                <tr><td class="gray">ვითარებითი</td><td><input type="text" maxlength="25" value="${data.grammar.transformative_s || '—'}"></td><td><input type="text" maxlength="25" value="${data.grammar.transformative_p || '—'}"></td></tr>
-                <tr><td class="gray">წოდებითი</td><td><input type="text" maxlength="25" value="${data.grammar.vocative_s || '—'}"></td><td><input type="text" maxlength="25" value="${data.grammar.vocative_p || '—'}"></td></tr>
+                <tr><td class="gray">სახელობითი</td><td>${data.word.word}</td><td><input id="participle_nominative_p" type="text" maxlength="25" value="${data.grammar.nominative_p || '—'}"></td></tr>
+                <tr><td class="gray">მოთხრობითი</td><td><input id="participle_ergative_s" type="text" maxlength="25" value="${data.grammar.ergative_s || '—'}"></td><td><input id="participle_ergative_p" type="text" maxlength="25" value="${data.grammar.ergative_p || '—'}"></td></tr>
+                <tr><td class="gray">მიცემითი</td><td><input id="participle_dative_s" type="text" maxlength="25" value="${data.grammar.dative_s || '—'}"></td><td><input id="participle_dative_p" type="text" maxlength="25" value="${data.grammar.dative_p || '—'}"></td></tr>
+                <tr><td class="gray">ნათესაობითი</td><td><input id="participle_genetive_s" type="text" maxlength="25" value="${data.grammar.genetive_s || '—'}"></td><td><input id="participle_genetive_p" type="text" maxlength="25" value="${data.grammar.genetive_p || '—'}"></td></tr>
+                <tr><td class="gray">მოქმედებითი</td><td><input id="participle_instrumental_s" type="text" maxlength="25" value="${data.grammar.instrumental_s || '—'}"></td><td><input id="participle_instrumental_p" type="text" maxlength="25" value="${data.grammar.instrumental_p || '—'}"></td></tr>
+                <tr><td class="gray">ვითარებითი</td><td><input id="participle_transformative_s" type="text" maxlength="25" value="${data.grammar.transformative_s || '—'}"></td><td><input id="participle_transformative_p" type="text" maxlength="25" value="${data.grammar.transformative_p || '—'}"></td></tr>
+                <tr><td class="gray">წოდებითი</td><td><input id="participle_vocative_s" type="text" maxlength="25" value="${data.grammar.vocative_s || '—'}"></td><td><input id="participle_vocative_p" type="text" maxlength="25" value="${data.grammar.vocative_p || '—'}"></td></tr>
             </tbody>
         </table>
     `;
@@ -895,7 +890,7 @@ const participleVoiceValue =
           <h4 class="gray">სემანტიკური ჯგუფი</h4>
 
           <div class="field">
-            <input
+            <input id="adverb_semantic_group"
               type="text"
               maxlength="50"
               value="${data.grammar.semantic_group || '—'}"
@@ -912,7 +907,7 @@ const participleVoiceValue =
           <h4 class="gray">სემანტიკური ჯგუფი</h4>
 
           <div class="field">
-            <input
+            <input id="particle_semantic_group"
               type="text"
               maxlength="50"
               value="${data.grammar.semantic_group || '—'}"
@@ -929,8 +924,8 @@ const participleVoiceValue =
           <h4 class="gray">გრამატიკული დახასიათება</h4>
 
           <div class="field">
-            <label for="conjunction-semantic-group" class="gray">ჯგუფი</label>
-            <select id="conjunction-semantic-group">
+            <label for="conjunction_semantic_group" class="gray">ჯგუფი</label>
+            <select id="conjunction_semantic_group">
               <option value="მაერთებელი" ${data.grammar.semantic_group === 'მაერთებელი' ? 'selected' : ''}>მაერთებელი</option>
               <option value="მაქვემდებარებელი" ${data.grammar.semantic_group === 'მაქვემდებარებელი' ? 'selected' : ''}>მაქვემდებარებელი</option>
             </select>
@@ -946,8 +941,8 @@ const participleVoiceValue =
           <h4 class="gray">გრამატიკული დახასიათება</h4>
 
           <div class="field">
-            <label for="postposition-case" class="gray">გამოიყენება</label>
-            <select id="postposition-case">
+            <label for="postposition_case" class="gray">გამოიყენება</label>
+            <select id="postposition_case">
               <option value="1" ${String(data.grammar.case) === '1' ? 'selected' : ''}>სახელობით ბრუნვასთან</option>
               <option value="2" ${String(data.grammar.case) === '2' ? 'selected' : ''}>სახელობით/მიცემით ბრუნვებთან</option>
               <option value="3" ${String(data.grammar.case) === '3' ? 'selected' : ''}>მიცემით ბრუნვასთან</option>
@@ -969,20 +964,20 @@ const participleVoiceValue =
           <h4 class="gray">გრამატიკული დახასიათება</h4>
 
           <div class="field">
-            <label for="interjection-emotic-group" class="gray">ემოციური ჯგუფი</label>
+            <label for="interjection_emotic_group" class="gray">ემოციური ჯგუფი</label>
             <input
               type="text"
-              id="interjection-emotic-group"
+              id="interjection_emotic_group"
               maxlength="200"
               value="${data.grammar.emotic_group || '—'}"
             >
           </div>
 
           <div class="field">
-            <label for="interjection-semantic-group" class="gray">სემანტიკური ჯგუფი</label>
+            <label for="interjection_semantic_group" class="gray">სემანტიკური ჯგუფი</label>
             <input
               type="text"
-              id="interjection-semantic-group"
+              id="interjection_semantic_group"
               maxlength="200"
               value="${data.grammar.semantic_group || '—'}"
             >
@@ -993,9 +988,244 @@ const participleVoiceValue =
   } else {
     grammarHtml = '<p>გრამატიკა არ არის</p>';
   }
-console.log('содержимое граматика:', grammarHtml);
+// console.log('содержимое граматика:', grammarHtml);
   return grammarHtml;
 
+}
+
+function getGrammarFieldValue(id) {
+  const el = document.getElementById(id);
+  if (!el) {
+    console.warn('Поле грамматики не найдено:', id);
+    return '—';
+  }
+
+  const value = String(el.value ?? '').trim();
+  return value === '' ? '—' : value;
+}
+
+function collectGrammarData(wordId, posId) {
+  const payload = {
+    word_id: Number(wordId || 0),
+    pos_id: Number(posId || 0),
+  };
+
+  switch (Number(posId)) {
+    // noun
+    case 1:
+      payload.nominative_p = getGrammarFieldValue('noun_nominative_p');
+      payload.ergative_s = getGrammarFieldValue('noun_ergative_s');
+      payload.ergative_p = getGrammarFieldValue('noun_ergative_p');
+      payload.dative_s = getGrammarFieldValue('noun_dative_s');
+      payload.dative_p = getGrammarFieldValue('noun_dative_p');
+      payload.genetive_s = getGrammarFieldValue('noun_genetive_s');
+      payload.genetive_p = getGrammarFieldValue('noun_genetive_p');
+      payload.instrumental_s = getGrammarFieldValue('noun_instrumental_s');
+      payload.instrumental_p = getGrammarFieldValue('noun_instrumental_p');
+      payload.transformative_s = getGrammarFieldValue('noun_transformative_s');
+      payload.transformative_p = getGrammarFieldValue('noun_transformative_p');
+      payload.vocative_s = getGrammarFieldValue('noun_vocative_s');
+      payload.vacative_p = getGrammarFieldValue('noun_vacative_p');
+      break;
+
+    // adjective
+    case 2:
+      payload.normal_degree = getGrammarFieldValue('adjective_normal_degree');
+      payload.comparative_degree = getGrammarFieldValue('adjective_comparative_degree');
+      payload.superlative_degree = getGrammarFieldValue('adjective_superlative_degree');
+      payload.nominative_p = getGrammarFieldValue('adjective_nominative_p');
+      payload.ergative_s = getGrammarFieldValue('adjective_ergative_s');
+      payload.ergative_p = getGrammarFieldValue('adjective_ergative_p');
+      payload.dative_s = getGrammarFieldValue('adjective_dative_s');
+      payload.dative_p = getGrammarFieldValue('adjective_dative_p');
+      payload.genetive_s = getGrammarFieldValue('adjective_genetive_s');
+      payload.genetive_p = getGrammarFieldValue('adjective_genetive_p');
+      payload.instrumental_s = getGrammarFieldValue('adjective_instrumental_s');
+      payload.instrumental_p = getGrammarFieldValue('adjective_instrumental_p');
+      payload.transformative_s = getGrammarFieldValue('adjective_transformative_s');
+      payload.transformative_p = getGrammarFieldValue('adjective_transformative_p');
+      payload.vocative_s = getGrammarFieldValue('adjective_vocative_s');
+      payload.vocative_p = getGrammarFieldValue('adjective_vocative_p');
+      break;
+
+    // numeral
+    case 3:
+      payload.kind = getGrammarFieldValue('numeral_kind');
+      payload.ergative_s = getGrammarFieldValue('numeral_ergative_s');
+      payload.dative_s = getGrammarFieldValue('numeral_dative_s');
+      payload.genetive_s = getGrammarFieldValue('numeral_genetive_s');
+      payload.instrumental_s = getGrammarFieldValue('numeral_instrumental_s');
+      payload.transformative_s = getGrammarFieldValue('numeral_transformative_s');
+      payload.vocative_s = getGrammarFieldValue('numeral_vocative_s');
+      break;
+
+    // pronoun
+    case 4:
+      payload.characteristic = getGrammarFieldValue('pronoun_characteristic');
+      payload.nominative_p = getGrammarFieldValue('pronoun_nominative_p');
+      payload.ergative_s = getGrammarFieldValue('pronoun_ergative_s');
+      payload.ergative_p = getGrammarFieldValue('pronoun_ergative_p');
+      payload.dative_s = getGrammarFieldValue('pronoun_dative_s');
+      payload.dative_p = getGrammarFieldValue('pronoun_dative_p');
+      payload.genetive_s = getGrammarFieldValue('pronoun_genetive_s');
+      payload.genetive_p = getGrammarFieldValue('pronoun_genetive_p');
+      payload.instrumental_s = getGrammarFieldValue('pronoun_instrumental_s');
+      payload.instrumental_p = getGrammarFieldValue('pronoun_instrumental_p');
+      payload.transformative_s = getGrammarFieldValue('pronoun_transformative_s');
+      payload.transformative_p = getGrammarFieldValue('pronoun_transformative_p');
+      payload.vocative_s = getGrammarFieldValue('pronoun_vocative_s');
+      payload.vocative_p = getGrammarFieldValue('pronoun_vocative_p');
+      break;
+
+    // verb
+    case 5:
+      payload.infinitive = getGrammarFieldValue('verb_infinitive');
+      payload.transilive_intransilive = getGrammarFieldValue('verb_transilive_intransilive');
+      payload.voice = getGrammarFieldValue('verb_voice');
+      payload.peculiarity = getGrammarFieldValue('verb_peculiarity');
+
+      // id в DOM = verb_present_lindicative, поле в БД = present_lindicative
+      payload.present_lindicative = getGrammarFieldValue('verb_present_lindicative');
+      payload.imperfect = getGrammarFieldValue('verb_imperfect');
+      payload.present_stubjunctive = getGrammarFieldValue('verb_present_stubjunctive');
+      payload.future = getGrammarFieldValue('verb_future');
+      payload.conditional = getGrammarFieldValue('verb_conditional');
+      payload.future_subjunctive = getGrammarFieldValue('verb_future_subjunctive');
+      payload.aorist = getGrammarFieldValue('verb_aorist');
+      payload.conjuctive_II = getGrammarFieldValue('verb_conjuctive_II');
+      payload.resultative_I = getGrammarFieldValue('verb_resultative_I');
+      payload.resultative_II = getGrammarFieldValue('verb_resultative_II');
+      payload.conjuctive_III = getGrammarFieldValue('verb_conjuctive_III');
+      break;
+
+    // verbnoun
+    case 6:
+      payload.verb = getGrammarFieldValue('verbnoun_verb');
+      payload.ergative_s = getGrammarFieldValue('verbnoun_ergative_s');
+      payload.dative_s = getGrammarFieldValue('verbnoun_dative_s');
+      payload.genetive_s = getGrammarFieldValue('verbnoun_genetive_s');
+      payload.instrumental_s = getGrammarFieldValue('verbnoun_instrumental_s');
+      payload.transformative_s = getGrammarFieldValue('verbnoun_transformative_s');
+      payload.vocative_s = getGrammarFieldValue('verbnoun_vocative_s');
+      break;
+
+    // participle
+    case 7:
+      payload.verb = getGrammarFieldValue('participle_verb');
+      payload.voice = getGrammarFieldValue('participle_voice');
+      payload.nominative_p = getGrammarFieldValue('participle_nominative_p');
+      payload.ergative_s = getGrammarFieldValue('participle_ergative_s');
+      payload.ergative_p = getGrammarFieldValue('participle_ergative_p');
+      payload.dative_s = getGrammarFieldValue('participle_dative_s');
+      payload.dative_p = getGrammarFieldValue('participle_dative_p');
+      payload.genetive_s = getGrammarFieldValue('participle_genetive_s');
+      payload.genetive_p = getGrammarFieldValue('participle_genetive_p');
+      payload.instrumental_s = getGrammarFieldValue('participle_instrumental_s');
+      payload.instrumental_p = getGrammarFieldValue('participle_instrumental_p');
+      payload.transformative_s = getGrammarFieldValue('participle_transformative_s');
+      payload.transformative_p = getGrammarFieldValue('participle_transformative_p');
+      payload.vocative_s = getGrammarFieldValue('participle_vocative_s');
+      payload.vocative_p = getGrammarFieldValue('participle_vocative_p');
+      break;
+
+    // adverb
+    case 8:
+      payload.semantic_group = getGrammarFieldValue('adverb_semantic_group');
+      break;
+
+    // particle
+    case 9:
+      payload.semantic_group = getGrammarFieldValue('particle_semantic_group');
+      break;
+
+    // conjunction
+    case 10:
+      payload.semantic_group = getGrammarFieldValue('conjunction_semantic_group');
+      break;
+
+    // postposition
+    case 11:
+      payload.case = getGrammarFieldValue('postposition_case');
+      break;
+
+    // interjection
+    case 12:
+      payload.emotic_group = getGrammarFieldValue('interjection_emotic_group');
+      payload.semantic_group = getGrammarFieldValue('interjection_semantic_group');
+      break;
+
+    default:
+      console.warn('Неизвестная часть речи для грамматики:', posId);
+      break;
+  }
+
+  return payload;
+}
+
+async function sendGrammarSave(payload) {
+  const fd = new FormData();
+
+  Object.entries(payload).forEach(([key, value]) => {
+    fd.append(key, String(value ?? ''));
+  });
+
+  const r = await apiFetchJson('api/grammar_save.php', {
+    method: 'POST',
+    body: fd,
+    headers: {
+      Accept: 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+  });
+
+  if (!r.res.ok || !r.json?.success) {
+    throw new Error(r.json?.error || 'შენახვის შეცდომა');
+  }
+
+  return r.json;
+}
+
+async function saveGrammarFromPanel(wordId, posId) {
+  const id = Number(wordId || 0);
+  const partId = Number(posId || 0);
+
+  if (!id || !partId) {
+    showPanelNotice(
+      'error',
+      'გრამატიკის შენახვა ვერ მოხერხდა',
+      'სიტყვის ან მეტყველების ნაწილის იდენტიფიკატორი ვერ მოიძებნა',
+      NOTICE_ERROR_MS,
+    );
+    return false;
+  }
+
+  const payload = collectGrammarData(id, partId);
+
+  const rightEl = document.querySelector('.right');
+  const prevScrollTop = rightEl ? rightEl.scrollTop : 0;
+
+  try {
+    await sendGrammarSave(payload);
+
+    showPanelNotice('success', 'გრამატიკა შენახულია', '', NOTICE_SUCCESS_MS);
+
+    await loadWordDetails(id, { keepContent: true });
+
+    if (rightEl) {
+      rightEl.scrollTop = prevScrollTop;
+    }
+
+    return true;
+  } catch (e) {
+    console.warn(e);
+    showPanelNotice(
+      'error',
+      'გრამატიკის შენახვა ვერ მოხერხდა',
+      e.message || 'ქსელის ან სერვერის შეცდომა',
+      NOTICE_ERROR_MS,
+    );
+    return false;
+  }
 }
 
 function bindRelatedButtons(panel) {
@@ -1314,6 +1544,13 @@ if (!panel) {
       await createUse(w.id);
     });
   }
+
+  const btnGrammarSave = $('#btn_grammar_save');
+if (btnGrammarSave) {
+  btnGrammarSave.addEventListener('click', async () => {
+    await saveGrammarFromPanel(w.id, pos.id);
+  });
+}
 
   panel.querySelectorAll('.btn-use-save').forEach((btn) => {
     btn.addEventListener('click', async () => {
