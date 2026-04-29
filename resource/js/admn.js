@@ -607,16 +607,15 @@ function addIdiomBlock(cardEl) {
 
 function renderGrammarHtml(data) {
   let grammarHtml = '';
-console.log(data.grammar);
-console.log(data.pos);
+
 const posId = data.word.part_of_speech.id;  // Берем ID части речи из данных о слове (или добавьте сюда правильное поле)
-console.log('Part of speech ID:', posId);  // Лог для проверки
+
   if (data.grammar) {
     // Проверяем, какая часть речи
     switch (posId) {
       // Существительное (noun)
       case 1:
-        console.log('Внутри:', posId);
+        // console.log('Внутри:', posId);
         grammarHtml += `
           <h3>გრამატიკა - არსებითი სახელი</h3>
           <h4 class="gray">ბრუნება</h4>
@@ -635,7 +634,7 @@ console.log('Part of speech ID:', posId);  // Лог для проверки
 
       // Прилагательное (adjective)
       case 2:
-        console.log('Внутри:', posId);
+        // console.log('Внутри:', posId);
         grammarHtml += `
           <h3>გრამატიკა - ზედსართავი სახელი</h3>
           <h4 class="gray">გრამატიკული დახასიათება</h4>
@@ -649,21 +648,21 @@ console.log('Part of speech ID:', posId);  // Лог для проверки
 <h4 class="gray">ბრუნება</h4>
 
           <table class="table">
-            <tr><td>&nbsp;</td><td class="gray">მხოლობითი რიცხვი</td><td class="gray">მრავლობითი რიცხვი</td></tr>
-            <tr><td class="gray">სახელობითი</td><td>${data.word.word}</td><td><input id="adjective_nominative_p" type="text" maxlength="45" value="${data.grammar.nominative_p || '—'}"></td></tr>
-            <tr><td class="gray">მოთხრობითი</td><td><input id="adjective_ergative_s" type="text" maxlength="45" value="${data.grammar.ergative_s || '—'}"></td><td><input id="adjective_ergative_p" type="text" maxlength="45" value="${data.grammar.ergative_p || '—'}"></td></tr>
-            <tr><td class="gray">მიცემითი</td><td><input id="adjective_dative_s" type="text" maxlength="45" value="${data.grammar.dative_s || '—'}"></td><td><input id="adjective_dative_p" type="text" maxlength="45" value="${data.grammar.dative_p || '—'}"></td></tr>
-            <tr><td class="gray">ნათესაობითი</td><td><input id="adjective_genetive_s" type="text" maxlength="45" value="${data.grammar.genetive_s || '—'}"></td><td><input id="adjective_genetive_p" type="text" maxlength="45" value="${data.grammar.genetive_p || '—'}"></td></tr>
-            <tr><td class="gray">მოქმედებითი</td><td><input id="adjective_instrumental_s" type="text" maxlength="45" value="${data.grammar.instrumental_s || '—'}"></td><td><input id="adjective_instrumental_p" type="text" maxlength="45" value="${data.grammar.instrumental_p || '—'}"></td></tr>
-            <tr><td class="gray">ვითარებითი</td><td><input id="adjective_transformative_s" type="text" maxlength="45" value="${data.grammar.transformative_s || '—'}"></td><td><input id="adjective_transformative_p" type="text" maxlength="45" value="${data.grammar.transformative_p || '—'}"></td></tr>
-            <tr><td class="gray">წოდებითი</td><td><input id="adjective_vocative_s" type="text" maxlength="45" value="${data.grammar.vocative_s || '—'}"></td><td><input id="adjective_vocative_p" type="text" maxlength="45" value="${data.grammar.vocative_p || '—'}"></td></tr>
+            <tr><td>&nbsp;</td><td class="gray">მხოლობითი რიცხვი</td><td class="gray">ზედსართავი სახელი<br>და არსებითი სახელი</td></tr>
+            <tr><td class="gray">სახელობითი</td><td>${data.word.word}</td><td><textarea id="adjective_nominative_p" maxlength="45">${data.grammar.nominative_p || '—'}</textarea></td></tr>
+            <tr><td class="gray">მოთხრობითი</td><td><textarea id="adjective_ergative_s" maxlength="45">${data.grammar.ergative_s || '—'}</textarea></td><td><textarea id="adjective_ergative_p" maxlength="45">${data.grammar.ergative_p || '—'}</textarea></td></tr>
+            <tr><td class="gray">მიცემითი</td><td><textarea id="adjective_dative_s" maxlength="45">${data.grammar.dative_s || '—'}</textarea></td><td><textarea id="adjective_dative_p" maxlength="45">${data.grammar.dative_p || '—'}</textarea></td></tr>
+            <tr><td class="gray">ნათესაობითი</td><td><textarea id="adjective_genetive_s" maxlength="45">${data.grammar.genetive_s || '—'}</textarea></td><td><textarea id="adjective_genetive_p" maxlength="45">${data.grammar.genetive_p || '—'}</textarea></td></tr>
+            <tr><td class="gray">მოქმედებითი</td><td><textarea id="adjective_instrumental_s" maxlength="45">${data.grammar.instrumental_s || '—'}</textarea></td><td><textarea id="adjective_instrumental_p" maxlength="45">${data.grammar.instrumental_p || '—'}</textarea></td></tr>
+            <tr><td class="gray">ვითარებითი</td><td><textarea id="adjective_transformative_s" maxlength="45">${data.grammar.transformative_s || '—'}</textarea></td><td><textarea id="adjective_transformative_p" maxlength="45">${data.grammar.transformative_p || '—'}</textarea></td></tr>
+            <tr><td class="gray">წოდებითი</td><td><textarea id="adjective_vocative_s" maxlength="45">${data.grammar.vocative_s || '—'}</textarea></td><td><textarea id="adjective_vocative_p" maxlength="45">${data.grammar.vocative_p || '—'}</textarea></td></tr>
           </table>
         `;
         break;
 
       // Числительное (numeral)
       case 3:
-        console.log('Внутри:', posId);
+        // console.log('Внутри:', posId);
         grammarHtml += `
           <h3>გრამატიკა - რიცხვითი სახელი</h3>
 
@@ -692,7 +691,7 @@ console.log('Part of speech ID:', posId);  // Лог для проверки
 
       // Местоимение (pronoun)
       case 4:
-        console.log('Внутри:', posId);
+         // console.log('Внутри:', posId);
         grammarHtml += `
           <h3>გრამატიკა - ნაცვალსახელი</h3>
           <h4 class="gray">გრამატიკული დახასიათება</h4>
@@ -753,7 +752,7 @@ console.log('Part of speech ID:', posId);  // Лог для проверки
 
         // Case 5 - Verb (ზმნა)
 case 5:
-    console.log('Inside case 5:', posId);
+    // console.log('Inside case 5:', posId);
 
     // Construct the HTML for the verb grammar
     grammarHtml += `
@@ -812,7 +811,7 @@ case 5:
 
       // Глагольное существительное (verbnoun)
       case 6:
-        console.log('Внутри:', posId);
+        // console.log('Внутри:', posId);
         grammarHtml += `
         <h3>გრამატიკა - საწყისი</h3>
           <h4 class="gray">გრამატიკული დახასიათება</h4>
@@ -884,7 +883,7 @@ case 7:
 
       // Наречие (adverb)
       case 8:
-        console.log('Внутри:', posId);
+        // console.log('Внутри:', posId);
         grammarHtml += `
           <h3>გრამატიკა - ზმნიზედა</h3>
           <h4 class="gray">სემანტიკური ჯგუფი</h4>
@@ -901,7 +900,7 @@ case 7:
 
             // Частица (particle)
       case 9:
-        console.log('Внутри:', posId);
+        // console.log('Внутри:', posId);
         grammarHtml += `
         <h3>გრამატიკა - ნაწილაკი</h3>
           <h4 class="gray">სემანტიკური ჯგუფი</h4>
@@ -918,7 +917,7 @@ case 7:
 
       // Союз (conjunction)
       case 10:
-        console.log('Внутри:', posId);
+        // console.log('Внутри:', posId);
         grammarHtml += `
         <h3>გრამატიკა - კავშირი</h3>
           <h4 class="gray">გრამატიკული დახასიათება</h4>
@@ -935,7 +934,7 @@ case 7:
 
             // Послог (postposition)
       case 11:
-        console.log('Внутри:', posId);
+        // console.log('Внутри:', posId);
         grammarHtml += `
           <h3>გრამატიკა - თანდებული</h3>
           <h4 class="gray">გრამატიკული დახასიათება</h4>
@@ -958,7 +957,7 @@ case 7:
 
             // Междометие (interjection)
       case 12:
-        console.log('Внутри:', posId);
+        // console.log('Внутри:', posId);
         grammarHtml += `
           <h3>გრამატიკა - შორისდებული</h3>
           <h4 class="gray">გრამატიკული დახასიათება</h4>
@@ -2022,7 +2021,7 @@ async function sendWordSaveUnified({ id, word, word_view, oldPos, newPos }) {
 			fd.append('pos', String(newPos));
 		}
 
-		console.log('SEND', url, `id=${id} posChange=${posChanged ? 'yes' : 'no'}`);
+		// console.log('SEND', url, `id=${id} posChange=${posChanged ? 'yes' : 'no'}`);
 
 		const r = await apiFetchJson(url, {
 			method: 'POST',
